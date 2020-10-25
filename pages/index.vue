@@ -1,89 +1,67 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+<v-card>
+  <div class="closet-top-bar">
+    <v-tabs color="red darken-1" centered　show-arrows v-model="tab">
+      <v-tab>トップス</v-tab>
+      <v-tab>アウター</v-tab>
+      <v-tab>パンツ</v-tab>
+      <v-tab>シューズ</v-tab>
+    </v-tabs>
+    <div class="closet-filter">
+      <v-icon color="red darken-1">mdi-tune-variant</v-icon>
+      <span>絞り込み　　</span>
+    </div>
+  </div>
+  <v-tabs-items v-model="tab" class="px-2 closet-tabs-items">
+    <v-tab-item v-for="n in 4" :key="n" class="">
+      <v-container fluid>
+        <v-row>
+          <v-col v-for="i in 16" :key="i" cols="4" md="4" class="pa-2">
+            <v-img :src="`https://picsum.photos/500/300?image=${i * n * 5 + 10}`" :lazy-src="`https://picsum.photos/10/6?image=${i * n * 5 + 10}`" aspect-ratio="1"></v-img>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-tab-item>
+  </v-tabs-items>
+</v-card>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
 export default {
-  components: {
-    Logo,
-    VuetifyLogo
-  }
-}
+  components: {},
+  data() {
+    return {
+      tab: null,
+    };
+  },
+};
 </script>
+
+<style scoped>
+.closet-top-bar {
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
+  width: 100%;
+}
+
+.closet-filter {
+  position: absolute;
+  z-index: 10;
+  height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  color: #e53935;
+  background-color: #fff;
+  border-bottom: 1px solid gainsboro;
+}
+
+.closet-tabs-items {
+  margin-top: 90px;
+}
+</style>
