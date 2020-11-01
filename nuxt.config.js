@@ -30,6 +30,10 @@ export default {
     '~/plugins/vue-croppa'
   ],
 
+  env: {
+    baseUrl: process.env.BASE_URL || 'https://dev.fuku.com/api/'
+  },
+
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
 
@@ -45,10 +49,19 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+
+    '@nuxtjs/auth'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    proxy: true,  // 追加
+    credentials: true,
+    baseURL: 'https://dev.fuku.com/api'
+  },
+  proxy: {
+    '/api': 'http://localhost:8000', // 追加
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
@@ -66,6 +79,24 @@ export default {
           success: colors.green.accent3
         }
       }
+    }
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: '/auth/login', method: 'post', propertyName: 'token' },
+          logout: { url: '/auth/logout', method: 'get' },
+          user: { url: '/me', method: 'get', propertyName: 'data'}
+        },
+        //tokenRequired: true,
+        //tokenType: 'bearer'
+      }
+    },
+    redirect: {
+      login: '/auth/login', // 未ログイン時に認証ルートへアクセスした際のリダイレクトURL
+      home: '/' // ログイン後のリダイレクトURL
     }
   },
 
