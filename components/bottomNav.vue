@@ -36,5 +36,6 @@ export default {
 <style scoped>
 .bottom-nav {
   border-top: 1px solid gainsboro;
+  z-index: 0;
 }
 </style>
