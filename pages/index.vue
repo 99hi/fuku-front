@@ -8,8 +8,7 @@
       <v-tab>シューズ</v-tab>
     </v-tabs>
     <div class="closet-filter">
-      <v-icon color="red darken-1">mdi-tune-variant</v-icon>
-      <span>絞り込み　　</span>
+      <closetSort></closetSort>
     </div>
   </div>
   <v-tabs-items v-model="tab" class="px-2 closet-tabs-items">
@@ -27,8 +26,11 @@
 </template>
 
 <script>
+import closetSort from '~/components/closetSort.vue';
 export default {
-  components: {},
+  components: {
+      closetSort
+  },
   data() {
     return {
       tab: null,
@@ -41,14 +43,14 @@ export default {
 .closet-top-bar {
   position: fixed;
   top: 0;
-  z-index: 10;
+  z-index: 1;
   background-color: #fff;
   width: 100%;
 }
 
 .closet-filter {
   position: absolute;
-  z-index: 10;
+  z-index: 1;
   height: 40px;
   width: 100%;
   display: flex;
@@ -60,6 +62,7 @@ export default {
   background-color: #fff;
   border-bottom: 1px solid gainsboro;
 }
+
 
 .closet-tabs-items {
   margin-top: 90px;

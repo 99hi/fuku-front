@@ -12,7 +12,7 @@
     <v-icon>mdi-shape-square-plus</v-icon>
   </v-btn>
 
-  <v-btn to="/mypage">
+  <v-btn @click="test">
     <span>mypage</span>
 
     <v-icon>mdi-account-outline</v-icon>
@@ -21,11 +21,21 @@
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+export default {
+  methods: {
+    test() {
+      axios.get('/api/test').then(res => {
+        console.log(res)
+      })
+    }
+  }
+};
 </script>
 
 <style scoped>
 .bottom-nav {
   border-top: 1px solid gainsboro;
+  z-index: 0;
 }
 </style>
