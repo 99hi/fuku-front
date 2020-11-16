@@ -1,5 +1,18 @@
 import colors from 'vuetify/es5/util/colors'
 
+const {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_CLOUDNAME,
+  CLOUDINARY_UPLOADPRESET,
+  BASE_URL,
+  BROWSER_BASE_URL,
+} = process.env;
+
+
+// const environment = process.env.NODE_ENV
+// const envSet = require(`./env.${environment}.js`)
+
+
 export default {
   server: {
     host: '0.0.0.0',
@@ -9,15 +22,15 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - fuku-front',
-    title: 'fuku-front',
+    titleTemplate: 'stylie',
+    title: 'stylie',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/png', href: 'icon.png' }
     ]
   },
 
@@ -31,7 +44,11 @@ export default {
   ],
 
   env: {
-    baseUrl: process.env.BASE_URL || 'https://dev.fuku.com/api/'
+    //baseUrl: process.env.NODE_ENV === "production" ? "http://stylie.ap-northeast-1.elasticbeanstalk.com/api" : "http://localhost:8000/api",
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_CLOUDNAME,
+    CLOUDINARY_UPLOADPRESET,
+    BASE_URL
   },
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -50,18 +67,29 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
 
-    '@nuxtjs/auth'
+    '@nuxtjs/auth',
+
+    '@nuxtjs/proxy'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
+    baseUrl: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
     proxy: true,  // 追加
     credentials: true,
-    baseURL: 'https://dev.fuku.com/api'
+    prefix: '/',
   },
+
   proxy: {
-    '/api': 'http://localhost:8000', // 追加
+    //'/api': process.env.NODE_ENV === "production" ? "http://stylie.ap-northeast-1.elasticbeanstalk.com/" : "http://localhost:8000/",
+    '/api': {
+      //'target': envSet.BASE_URL,
+      target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
+      secure: false,
+      changeOrigin: true,
+    }
   },
+
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
@@ -82,13 +110,24 @@ export default {
     }
   },
 
+  manifest: {
+    name: 'stylie',
+    lang: 'ja',
+    short_name: 'stylie',
+    title: 'stylie',
+    description: 'stylie description',
+    theme_color: '#ffffff',
+    background_color: '#ffffff',
+    start_url: '/',
+  },
+
   auth: {
     strategies: {
       local: {
         endpoints: {
           login: { url: '/auth/login', method: 'post', propertyName: 'token' },
           logout: { url: '/auth/logout', method: 'get' },
-          user: { url: '/me', method: 'get', propertyName: 'data'}
+          user: { url: '/me', method: 'get', propertyName: 'data' }
         },
         //tokenRequired: true,
         //tokenType: 'bearer'

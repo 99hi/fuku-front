@@ -1,18 +1,18 @@
 <template>
-<v-bottom-navigation color="red darken-1" grow fixed flat class="elevation-0 bottom-nav">
-  <v-btn to="/">
+<v-bottom-navigation color="red darken-1" height="70px" grow fixed flat class="elevation-0 bottom-nav">
+  <v-btn to="/" class="pb-6">
     <span>closet</span>
 
     <v-icon>mdi-wardrobe-outline</v-icon>
   </v-btn>
 
-  <v-btn to="/add">
+  <v-btn to="/add" class="pb-6">
     <span>add</span>
 
     <v-icon>mdi-shape-square-plus</v-icon>
   </v-btn>
 
-  <v-btn @click="test">
+  <v-btn to="/mypage" class="pb-6">
     <span>mypage</span>
 
     <v-icon>mdi-account-outline</v-icon>
@@ -23,19 +23,13 @@
 <script>
 import axios from "axios";
 export default {
-  methods: {
-    test() {
-      axios.get('/api/test').then(res => {
-        console.log(res)
-      })
-    }
-  }
+  methods: {},
 };
 </script>
 
-<style scoped>
+<style>
 .bottom-nav {
   border-top: 1px solid gainsboro;
-  z-index: 0;
+  z-index: 0 !important;
 }
 </style>

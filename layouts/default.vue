@@ -24,12 +24,16 @@ export default {
   data() {
     return {};
   },
+  mounted() {
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.BASE_URL);
+  },
 };
 </script>
 
 <style>
 .container {
-  padding: 0;
+  padding: 0 !important;
 }
 
 .v-card {
