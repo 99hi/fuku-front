@@ -1,28 +1,40 @@
 <template>
-<v-card style="position: relative">
-  <div class="closet-top-bar">
-    <v-tabs color="red darken-1" centered　show-arrows v-model="tab">
-      <v-tab v-for="(category, key) in categoryList" :key="key">
-        {{ category }}
-      </v-tab>
-    </v-tabs>
-    <div class="closet-menu">
-      <closetSort @changeColor="colorSort" @reset="sortReset"></closetSort>
-      <v-btn @click="test">test</v-btn>
+  <v-card style="position: relative">
+    <div class="closet-top-bar">
+      <v-tabs color="red darken-1" centered　show-arrows v-model="tab">
+        <v-tab v-for="(category, key) in categoryList" :key="key">
+          {{ category }}
+        </v-tab>
+      </v-tabs>
+      <div class="closet-menu">
+        <closetSort
+          @filter="applyFilter"
+        ></closetSort>
+        <v-btn @click="test">test</v-btn>
+      </div>
     </div>
-  </div>
-  <v-tabs-items v-model="tab" class="px-2 closet-tabs-items">
-    <v-tab-item v-for="(category, key) in categoryList" :key="key" class="">
-      <v-container fluid>
-        <v-row>
-          <v-col v-for="clothes in sortList[tab]" :key="clothes.id" cols="4" md="4" class="pa-2">
-            <v-img :src="clothes.url" :lazy-src="clothes.url" aspect-ratio="1"></v-img>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-tab-item>
-  </v-tabs-items>
-</v-card>
+    <v-tabs-items v-model="tab" class="px-2 closet-tabs-items">
+      <v-tab-item v-for="(category, key) in categoryList" :key="key" class="">
+        <v-container fluid>
+          <v-row>
+            <v-col
+              v-for="clothes in filteredClothes[tab]"
+              :key="clothes.id"
+              cols="4"
+              md="4"
+              class="pa-2"
+            >
+              <v-img
+                :src="clothes.url"
+                :lazy-src="clothes.url"
+                aspect-ratio="1"
+              ></v-img>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-tab-item>
+    </v-tabs-items>
+  </v-card>
 </template>
 
 <script>
@@ -35,11 +47,10 @@ export default {
     return {
       tab: 0,
       clothesList: Object,
-      sortList: Object,
+      filteredClothes: Object,
       categoryList: ["トップス", "アウター", "パンツ", "シューズ"],
       active: "トップス",
       position: [0, 0, 0, 0],
-      selectedColor: undefined,
     };
   },
   created() {
@@ -57,7 +68,7 @@ export default {
     allClothes() {
       this.$axios.get("/api/clothes/get").then((res) => {
         this.clothesList = res.data;
-        this.sortList = res.data;
+        this.filteredClothes = res.data
       });
     },
     handleScroll() {
@@ -65,25 +76,44 @@ export default {
       this.position[this.tab] = window.scrollY;
     },
     test() {
-      console.log("test");
     },
-    colorSort(selectedColor) {
-      console.log("colorSort実行");
-      let resultList = [];
-      //const selectedColor = this.selectedColor; //filter内でthisを使えないため
-      console.log(typeof selectedColor);
-      this.categoryList.forEach((value, index) => {
-        const result = this.clothesList[index].filter((value, index) => {
-          if (value.color == selectedColor || selectedColor == undefined)
-            return value;
-        });
-        resultList.push(result);
-      });
-      console.log(resultList);
-      this.sortList = resultList;
-    },
-    sortReset() {
-      this.sortList = this.clothesList;
+    applyFilter(selectedcolor, selectedSeason) {
+      console.log("色：" + selectedcolor)
+      console.log("シーズン：" + selectedSeason)
+      //targetDataに対してソートをかける
+      let targetData = Object.assign({}, this.clothesList)
+      //色のフィルター
+      if(selectedcolor.length !== 0) {
+        let resultData = []
+        this.categoryList.forEach((value, index) => {
+          let data = targetData[index].filter((value, index) => {
+            if(value.color === selectedcolor) return value
+          })
+          resultData.push(data)
+        })
+        targetData = resultData
+      } else {
+        console.log("色は指定されていません")
+      }
+      
+      //シーズンのフィルター
+      if(selectedSeason.length !== 0) {
+        let resultData = []
+        this.categoryList.forEach((value, index) => {
+          const data = targetData[index].filter((value, index) => {
+            const seasonList = value.seasons.map((season) => season.name)
+            if (seasonList.some((season) => selectedSeason.includes(season))) return value
+          })
+          resultData.push(data)
+        })
+        targetData = resultData
+      } else {
+        console.log("シーズンは指定されていません")
+      }
+
+      //フィルターをかけたデータを適用
+      this.filteredClothes = targetData
+      console.log(targetData)
     },
   },
   watch: {
@@ -91,7 +121,6 @@ export default {
     tab() {
       // 切り替え後のタブですでに保持されたスクロール位置があればその位置を取得
       const y = this.position[this.tab] || 0;
-
       // 即時スクロールすると、切り替え前のタブの長さ ＜ 切り替え後のタブの長さである場合に、切り替え前のタブの最大値までしかスクロールされないことがある（切り替え後のタブの内容が描画される前にスクロールしようとする）ので、setTimeoutでタイミングを少しずらす
       setTimeout(() => {
         window.scroll(0, y);

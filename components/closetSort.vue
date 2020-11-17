@@ -5,59 +5,7 @@
   </div>
 
   <v-navigation-drawer right absolute temporary v-model="drawer" class="sort-drawer" width="80%">
-    <!--
-    <v-list-item class="sort-drawer-list"> </v-list-item>
-
-    <v-divider></v-divider>
-
-    <v-list dense>
-      <v-list-item-group v-model="listModel">
-        <v-list-item>
-          <v-list-item-content class="sort-drawer-list-content">
-            <v-list-item-title>検索</v-list-item-title>
-            <v-text-field v-model="searchWord" clearable outlined dense></v-text-field>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item>
-          <v-list-item-content class="sort-drawer-list-content">
-            <v-list-item-title>色</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action class="sort-drawer-list-content-text">
-            <v-list-item-action-text>指定しない ></v-list-item-action-text>
-          </v-list-item-action>
-        </v-list-item>
-
-        <v-list-item>
-          <v-list-item-content class="sort-drawer-list-content">
-            <v-list-item-title>シーズン</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action class="sort-drawer-list-content-text">
-            <v-list-item-action-text>指定しない ></v-list-item-action-text>
-          </v-list-item-action>
-        </v-list-item>
-
-        <v-list-item>
-          <v-list-item-content class="sort-drawer-list-content">
-            <v-list-item-title>登録日</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action class="sort-drawer-list-content-text">
-            <v-list-item-action-text>新しい ></v-list-item-action-text>
-          </v-list-item-action>
-        </v-list-item>
-
-        <v-list-item>
-          <v-list-item-content class="sort-drawer-list-content">
-            <v-list-item-title>お気に入り</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action class="sort-drawer-list-content-text">
-            <v-list-item-action-text>指定なし ></v-list-item-action-text>
-          </v-list-item-action>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
-    -->
-    <v-list-item>
+     <v-list-item>
       <v-list-item-content>
         <v-list-item-title> 絞り込み・ソート </v-list-item-title>
       </v-list-item-content>
@@ -74,7 +22,7 @@
               <v-col cols="8" class="text--secondary">
                 <v-fade-transition leave-absolute>
                   <span v-if="open" key="0"> 色を選択 </span>
-                  <span v-else key="1">{{ selectedColor.label }}</span>
+                  <span v-else key="1">{{ filterQuery.color.label }}</span>
                 </v-fade-transition>
               </v-col>
             </v-row>
@@ -82,8 +30,8 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-container class="px-0" fluid>
-            <v-radio-group v-model="selectedColor">
-              <v-radio v-for="(color, key) in colors" :key="key" @click="changeColor" :label="color.label" :value="color"></v-radio>
+            <v-radio-group v-model="filterQuery.color">
+              <v-radio v-for="(color, key) in colors" :key="key" :label="color.label" :value="color"></v-radio>
             </v-radio-group>
           </v-container>
         </v-expansion-panel-content>
@@ -97,17 +45,17 @@
               <v-fade-transition leave-absolute>
                 <span v-if="open" key="0"> シーズンを選択 </span>
                 <span v-else key="1">
-                  {{ selectedSeason.toString() }}
+                  {{ filterQuery.season.toString() }}
                 </span>
               </v-fade-transition>
             </v-col>
           </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-checkbox v-model="selectedSeason" label="春" color="#F06292" value="春" hide-details></v-checkbox>
-          <v-checkbox v-model="selectedSeason" label="夏" color="#03A9F4" value="夏" hide-details></v-checkbox>
-          <v-checkbox v-model="selectedSeason" label="秋" color="#795548" value="秋" hide-details></v-checkbox>
-          <v-checkbox v-model="selectedSeason" label="冬" color="#607D8B" value="冬" hide-details></v-checkbox>
+          <v-checkbox v-model="filterQuery.season" label="春" color="#F06292" value="春" hide-details></v-checkbox>
+          <v-checkbox v-model="filterQuery.season" label="夏" color="#03A9F4" value="夏" hide-details></v-checkbox>
+          <v-checkbox v-model="filterQuery.season" label="秋" color="#795548" value="秋" hide-details></v-checkbox>
+          <v-checkbox v-model="filterQuery.season" label="冬" color="#607D8B" value="冬" hide-details></v-checkbox>
         </v-expansion-panel-content>
       </v-expansion-panel>
 
@@ -173,21 +121,10 @@
 export default {
   data() {
     return {
-      listModel: false,
       drawer: null,
-      searchWord: null,
-
-      date: null,
-      trip: {
-        name: "",
-        location: null,
-        start: null,
-        end: null,
-      },
-      selectedColor: Object,
       colors: [{
           label: "選択無し",
-          value: undefined,
+          value: "",
         },
         {
           label: "ホワイト系",
@@ -238,20 +175,34 @@ export default {
           value: "orange",
         },
       ],
-      selectedSeason: [],
+      filterQuery: {
+        color: {
+          value: ""
+        },
+        season: []
+      },
       selectedDate: "新しい",
       selectedFab: "すべて表示",
     };
   },
   methods: {
-    changeColor() {
-      this.$emit("changeColor", this.selectedColor.value);
-    },
     reset() {
-      this.selectedColor = new Object();
-      this.$emit("reset");
+      this.filterQuery = {
+        color: {
+          value: ""
+        },
+        season: []
+      }
     },
   },
+  watch: {
+    filterQuery: {
+      handler(val, oldVal) {
+        this.$emit("filter", val.color.value, val.season)
+      },
+      deep: true
+    }
+  }
 };
 </script>
 
