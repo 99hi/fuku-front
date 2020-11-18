@@ -67,7 +67,7 @@
               <v-col cols="8" class="text--secondary">
                 <v-fade-transition leave-absolute>
                   <span v-if="open" key="0"> 並びを変更 </span>
-                  <span v-else key="1">{{ selectedDate }}</span>
+                  <span v-else key="1">{{ filterQuery.dateSort === "true" ? "古い": "新しい" }}</span>
                 </v-fade-transition>
               </v-col>
             </v-row>
@@ -75,9 +75,9 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-container class="px-0" fluid>
-            <v-radio-group v-model="selectedDate">
-              <v-radio label="新しい" value="新しい"></v-radio>
-              <v-radio label="古い" value="古い"></v-radio>
+            <v-radio-group v-model="filterQuery.dateSort">
+              <v-radio label="新しい" value=false></v-radio>
+              <v-radio label="古い" value=true></v-radio>
             </v-radio-group>
           </v-container>
         </v-expansion-panel-content>
@@ -179,7 +179,8 @@ export default {
         color: {
           value: ""
         },
-        season: []
+        season: [],
+        dateSort: "false" //新しい順
       },
       selectedDate: "新しい",
       selectedFab: "すべて表示",
@@ -191,14 +192,16 @@ export default {
         color: {
           value: ""
         },
-        season: []
+        season: [],
+        dateSort: "false"
       }
     },
   },
   watch: {
     filterQuery: {
       handler(val, oldVal) {
-        this.$emit("filter", val.color.value, val.season)
+        console.log(val)
+        this.$emit("filter", val.color.value, val.season, val.dateSort)
       },
       deep: true
     }

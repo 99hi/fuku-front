@@ -77,44 +77,84 @@ export default {
     },
     test() {
     },
-    applyFilter(selectedcolor, selectedSeason) {
+    applyFilter(selectedcolor, selectedSeason, dateSort) {
       console.log("色：" + selectedcolor)
       console.log("シーズン：" + selectedSeason)
-      //targetDataに対してソートをかける
+      //targetDataに対してソートをかけていく
       let targetData = Object.assign({}, this.clothesList)
-      //色のフィルター
+      
+      //色フィルター
       if(selectedcolor.length !== 0) {
-        let resultData = []
-        this.categoryList.forEach((value, index) => {
-          let data = targetData[index].filter((value, index) => {
-            if(value.color === selectedcolor) return value
-          })
-          resultData.push(data)
-        })
-        targetData = resultData
+        targetData = this.colorFilter(targetData, selectedcolor)
       } else {
         console.log("色は指定されていません")
       }
-      
-      //シーズンのフィルター
+      //シーズンフィルター
       if(selectedSeason.length !== 0) {
-        let resultData = []
-        this.categoryList.forEach((value, index) => {
-          const data = targetData[index].filter((value, index) => {
-            const seasonList = value.seasons.map((season) => season.name)
-            if (seasonList.some((season) => selectedSeason.includes(season))) return value
-          })
-          resultData.push(data)
-        })
-        targetData = resultData
+        targetData = this.seasonFilter(targetData, selectedSeason)
       } else {
         console.log("シーズンは指定されていません")
       }
+      //日付ソート
+      targetData = this.dateSort(targetData, dateSort)
 
       //フィルターをかけたデータを適用
       this.filteredClothes = targetData
       console.log(targetData)
     },
+    //色フィルター
+    colorFilter(targetData, selectedcolor) {
+      let resultData = []
+      this.categoryList.forEach((value, index) => {
+        let data = targetData[index].filter((value, index) => {
+          if(value.color === selectedcolor) return value
+        })
+        resultData.push(data)
+      })
+      return resultData
+    },
+    //シーズンフィルター
+    seasonFilter(targetData, selectedSeason) {
+      let resultData = []
+      this.categoryList.forEach((value, index) => {
+        const data = targetData[index].filter((value, index) => {
+          const seasonList = value.seasons.map((season) => season.name)
+          if (seasonList.some((season) => selectedSeason.includes(season))) return value
+        })
+        resultData.push(data)
+      })
+      return resultData
+    },
+    //日付ソート
+    dateSort(targetData, dateSort) {
+      if(dateSort === "true") {
+        console.log("古い順でソート")
+        let resultData = []
+        this.categoryList.forEach((value, index) => {
+          const data = targetData[index].sort((a, b) => {
+            let adate = Date.parse(a.created_at.substr(0, 19).replace('T', ' '))
+            let bdate = Date.parse(b.created_at.substr(0, 19).replace('T', ' '))
+
+            return adate - bdate
+          })
+          resultData.push(data)
+        })
+        return resultData
+      } else {
+        console.log("新しい順でソート")
+        let resultData = []
+        this.categoryList.forEach((value, index) => {
+          const data = targetData[index].sort((a, b) => {
+            let adate = Date.parse(a.created_at.substr(0, 19).replace('T', ' '))
+            let bdate = Date.parse(b.created_at.substr(0, 19).replace('T', ' '))
+
+            return bdate - adate
+          })
+          resultData.push(data)
+        })
+        return resultData
+      }
+    }
   },
   watch: {
     // activeの変更を検知
