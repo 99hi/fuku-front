@@ -18,6 +18,27 @@
         <v-expansion-panel-header>
           <template v-slot:default="{ open }">
             <v-row no-gutters>
+              <v-col cols="4">タグ検索</v-col>
+              <v-col cols="8" class="text--secondary">
+                <v-fade-transition leave-absolute>
+                  <span v-if="open" key="0"> タグを選択 </span>
+                  <span v-else key="1">{{ filterQuery.tags.toString() }}</span>
+                </v-fade-transition>
+              </v-col>
+            </v-row>
+          </template>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content style="height: 400px">
+          <v-container class="px-0" fluid>
+            <v-autocomplete v-model="filterQuery.tags" :items="tags" item-text="name" chips label="タグを選択してください" :menu-props="{ top: false, offsetY: true }" multiple　clearable　deletable-chips></v-autocomplete>
+          </v-container>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          <template v-slot:default="{ open }">
+            <v-row no-gutters>
               <v-col cols="4">色</v-col>
               <v-col cols="8" class="text--secondary">
                 <v-fade-transition leave-absolute>
@@ -176,6 +197,7 @@ export default {
         },
       ],
       filterQuery: {
+        tags: [],
         color: {
           value: ""
         },
@@ -184,11 +206,13 @@ export default {
       },
       selectedDate: "新しい",
       selectedFab: "すべて表示",
+      tags: [],
     };
   },
   methods: {
     reset() {
       this.filterQuery = {
+        tags: [],
         color: {
           value: ""
         },
@@ -196,12 +220,20 @@ export default {
         dateSort: "false"
       }
     },
+    getTags() {
+      this.$axios.get("/api/tag/all").then((res) => {
+        this.tags = res.data;
+      });
+    },
+  },
+  mounted() {
+    this.getTags()
   },
   watch: {
     filterQuery: {
       handler(val, oldVal) {
         console.log(val)
-        this.$emit("filter", val.color.value, val.season, val.dateSort)
+        this.$emit("filter", val.color.value, val.season, val.dateSort, val.tags)
       },
       deep: true
     }

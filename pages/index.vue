@@ -77,11 +77,18 @@ export default {
     },
     test() {
     },
-    applyFilter(selectedcolor, selectedSeason, dateSort) {
+    applyFilter(selectedcolor, selectedSeason, dateSort, tags) {
       console.log("色：" + selectedcolor)
       console.log("シーズン：" + selectedSeason)
       //targetDataに対してソートをかけていく
       let targetData = Object.assign({}, this.clothesList)
+
+      //タグ検索
+      if(tags.length !== 0) {
+        targetData = this.tagSearch(targetData, tags)
+      } else {
+        console.log("タグは指定されていません")
+      }
       
       //色フィルター
       if(selectedcolor.length !== 0) {
@@ -101,6 +108,18 @@ export default {
       //フィルターをかけたデータを適用
       this.filteredClothes = targetData
       console.log(targetData)
+    },
+    //タグ検索
+    tagSearch(targetData, selectedTag) {
+      let resultData = []
+      this.categoryList.forEach((value, index) => {
+        const data = targetData[index].filter((value, index) => {
+          const tagList = value.tags.map((tag) => tag.name)
+          if (tagList.some((tag) => selectedTag.includes(tag))) return value
+        })
+        resultData.push(data)
+      })
+      return resultData
     },
     //色フィルター
     colorFilter(targetData, selectedcolor) {
