@@ -1,5 +1,5 @@
 <template>
-<v-alert :type="type" class="alert-message" dense v-if="flag">{{ message }}</v-alert>
+  <v-alert :type="type" class="alert-message" dense v-if="flag">{{ message }}</v-alert>
 </template>
 
 <script>
@@ -8,22 +8,22 @@ export default {
     return {
       flag: false,
       message: String,
-      type: String
-    }
+      type: String,
+    };
   },
 
   methods: {
     show(type, message) {
-      this.type = type
-      this.message = message
+      this.type = type;
+      this.message = message;
       this.flag = true;
       // setTimeoutで3000ms後にflagをfalseにする
       setTimeout(() => {
         this.flag = false;
       }, 5000);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

@@ -1,16 +1,16 @@
 <template>
-<v-app>
-  <!-- ヘッダー -->
+  <v-app>
+    <!-- ヘッダー -->
 
-  <!-- メイン -->
-  <v-main class="mb-14">
-    <v-container>
-      <nuxt />
-    </v-container>
-  </v-main>
+    <!-- メイン -->
+    <v-main class="mb-14">
+      <v-container>
+        <nuxt />
+      </v-container>
+    </v-main>
 
-  <BottomNav></BottomNav>
-</v-app>
+    <BottomNav></BottomNav>
+  </v-app>
 </template>
 
 <script>

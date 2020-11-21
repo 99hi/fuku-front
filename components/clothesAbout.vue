@@ -1,0 +1,237 @@
+<template>
+  <v-row justify="center">
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-card>
+        <v-toolbar>
+          <v-btn icon @click="dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>服の詳細</v-toolbar-title>
+          <v-btn @click="test">test</v-btn>
+          <v-spacer></v-spacer>
+          <!--
+          <v-toolbar-items>
+            <v-btn @click="dialog = false"><v-icon></v-icon> 保存 </v-btn>
+          </v-toolbar-items>
+          -->
+        </v-toolbar>
+        <v-list three-line subheader>
+          <v-list-item>
+            <v-list-item-content>
+              <v-img :src="clothes.url"></v-img>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <v-divider></v-divider>
+        <v-expansion-panels focusable accordion>
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              <template v-slot:default="{ open }">
+                <v-row no-gutters>
+                  <v-col cols="4">カテゴリー</v-col>
+                  <v-col cols="8" class="text--secondary">
+                    <v-fade-transition leave-absolute>
+                      <span v-if="open" key="0"> カテゴリーを選択 </span>
+                      <span v-else key="1">{{ clothes.category }}</span>
+                    </v-fade-transition>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-container class="px-0" fluid>
+                <v-radio-group v-model="clothes.category">
+                  <v-radio v-for="(category, key) in categoryList" :key="key" :label="category" :value="category"></v-radio>
+                </v-radio-group>
+              </v-container>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              <template v-slot:default="{ open }">
+                <v-row no-gutters>
+                  <v-col cols="4">色</v-col>
+                  <v-col cols="8" class="text--secondary">
+                    <v-fade-transition leave-absolute>
+                      <span v-if="open" key="0"> 色を選択 </span>
+                      <span v-else key="1">{{ clothes.color }}</span>
+                    </v-fade-transition>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-container class="px-0" fluid>
+                <v-radio-group v-model="clothes.color">
+                  <v-radio v-for="(color, key) in colors" :key="key" :label="color.label" :value="color.value"></v-radio>
+                </v-radio-group>
+              </v-container>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              <template v-slot:default="{ open }">
+                <v-row no-gutters>
+                  <v-col cols="4">シーズン</v-col>
+                  <v-col cols="8" class="text--secondary">
+                    <v-fade-transition leave-absolute>
+                      <span v-if="open" key="0"> シーズンを選択 </span>
+                      <span v-else key="1">{{ selectedSeason.toString() }}</span>
+                    </v-fade-transition>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-container class="px-0" fluid>
+                <v-checkbox v-model="selectedSeason" label="春" color="#F06292" value="春" hide-details></v-checkbox>
+                <v-checkbox v-model="selectedSeason" label="夏" color="#03A9F4" value="夏" hide-details></v-checkbox>
+                <v-checkbox v-model="selectedSeason" label="秋" color="#795548" value="秋" hide-details></v-checkbox>
+                <v-checkbox v-model="selectedSeason" label="冬" color="#607D8B" value="冬" hide-details></v-checkbox>
+              </v-container>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              <template v-slot:default="{ open }">
+                <v-row no-gutters>
+                  <v-col cols="4">タグ</v-col>
+                  <v-col cols="8" class="text--secondary">
+                    <v-fade-transition leave-absolute>
+                      <span v-if="open" key="0"> タグを選択 </span>
+                      <span v-else key="1">{{ selectedTag.toString() }}</span>
+                    </v-fade-transition>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-container class="px-0" fluid>
+                <v-autocomplete v-model="selectedTag" :items="tags" item-text="name" chips label="タグを選択してください" :menu-props="{ top: false, offsetY: true }" multiple　clearable　deletable-chips></v-autocomplete>
+              </v-container>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+
+        <v-row justify="center" class="ma-4">
+          <v-btn width="40%" color="grey lighten-1">削除</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn width="40%" color="red darken-1" dark @click="update">保存</v-btn>
+        </v-row>
+      </v-card>
+    </v-dialog>
+  </v-row>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      dialog: false,
+      notifications: false,
+      sound: true,
+      widgets: false,
+      clothes: Object,
+      selectedSeason: [],
+      selectedTag: [],
+      categoryList: ["トップス", "アウター", "パンツ", "シューズ"],
+      colors: [
+        {
+          label: "ホワイト系",
+          value: "white",
+        },
+        {
+          label: "ブラック系",
+          value: "black",
+        },
+        {
+          label: "グレイ系",
+          value: "grey",
+        },
+        {
+          label: "ブラウン系",
+          value: "brown",
+        },
+        {
+          label: "ベージュ系",
+          value: "beige",
+        },
+        {
+          label: "グリーン系",
+          value: "green",
+        },
+        {
+          label: "ブルー系",
+          value: "blue",
+        },
+        {
+          label: "パープル系",
+          value: "purple",
+        },
+        {
+          label: "イエロー系",
+          value: "yellow",
+        },
+        {
+          label: "ピンク系",
+          value: "pink",
+        },
+        {
+          label: "レッド系",
+          value: "red",
+        },
+        {
+          label: "オレンジ系",
+          value: "orange",
+        },
+      ],
+      tags: [],
+    };
+  },
+  methods: {
+    showAbout(clothes) {
+      console.log("test");
+      console.log(clothes);
+      this.dialog = true;
+      this.clothes = clothes;
+      this.selectedSeason = clothes.seasons.map((season) => season.name);
+      this.selectedTag = clothes.tags.map((tag) => tag.name);
+    },
+    getTags() {
+      this.$axios.get("/api/tag/all").then((res) => {
+        this.tags = res.data;
+      });
+    },
+    update() {
+      console.log("アップデート");
+      this.clothes.tags = this.selectedTag;
+      this.clothes.seasons = this.selectedSeason;
+      this.$axios.put("/api/clothes/update/" + this.clothes.id, { data: this.clothes }).then((res) => {
+        console.log(res.data);
+      });
+    },
+    delete() {
+      console.log("削除");
+    },
+    test() {},
+  },
+  mounted() {
+    this.getTags();
+  },
+};
+</script>
+
+<style scoped>
+.add-form {
+  margin: 0 auto;
+  max-width: 500px;
+  width: 90%;
+}
+
+.color-sheet {
+  border: 2px solid black;
+}
+</style>

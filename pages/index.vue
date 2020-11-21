@@ -13,6 +13,7 @@
         <v-btn @click="test">test</v-btn>
       </div>
     </div>
+    <clothesAbout ref="clothesAbout"></clothesAbout>
     <v-tabs-items v-model="tab" class="px-2 closet-tabs-items">
       <v-tab-item v-for="(category, key) in categoryList" :key="key" class="">
         <v-container fluid>
@@ -28,6 +29,7 @@
                 :src="clothes.url"
                 :lazy-src="clothes.url"
                 aspect-ratio="1"
+                @click="openAbout(clothes)"
               ></v-img>
             </v-col>
           </v-row>
@@ -39,9 +41,11 @@
 
 <script>
 import closetSort from "~/components/closetSort.vue";
+import clothesAbout from "~/components/clothesAbout.vue";
 export default {
   components: {
     closetSort,
+    clothesAbout
   },
   data() {
     return {
@@ -51,6 +55,7 @@ export default {
       categoryList: ["トップス", "アウター", "パンツ", "シューズ"],
       active: "トップス",
       position: [0, 0, 0, 0],
+      dialog: false,
     };
   },
   created() {
@@ -70,6 +75,10 @@ export default {
         this.clothesList = res.data;
         this.filteredClothes = res.data
       });
+    },
+    openAbout(clothes) {
+      console.log("アボウトが呼ばれた")
+      this.$refs.clothesAbout.showAbout(clothes)
     },
     handleScroll() {
       // 現在アクティブなタブのスクロール位置を保持
