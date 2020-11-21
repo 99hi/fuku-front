@@ -1,25 +1,32 @@
 <template>
-  <v-alert :type="type" class="alert-message" dense v-if="flag">{{ message }}</v-alert>
+  <v-alert :type="alertOption.type" class="alert-message" dense v-if="alertFlag" transition="slide-y-transition">{{ alertOption.message }}</v-alert>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      flag: false,
-      message: String,
-      type: String,
+      flag: true,
+      alertOption: {
+        message: "",
+        type: "",
+      },
     };
   },
-
-  methods: {
-    show(type, message) {
-      this.type = type;
-      this.message = message;
-      this.flag = true;
-      // setTimeoutで3000ms後にflagをfalseにする
+  methods: {},
+  computed: {
+    alertFlag() {
+      return this.$store.getters.getFlag;
+    },
+  },
+  watch: {
+    alertFlag() {
+      this.alertOption = this.$store.getters.getAlertOption;
+      if (this.$store.getters.getFlag === false) return;
+      //setTimeoutで3000ms後にアラートを閉じる;
       setTimeout(() => {
-        this.flag = false;
+        this.$store.commit("changeFlag", false);
       }, 5000);
     },
   },
@@ -32,7 +39,7 @@ export default {
   top: 20px;
   left: 50%;
   transform: translate(-50%);
-  z-index: 20;
+  z-index: 999;
   width: 70%;
 }
 </style>

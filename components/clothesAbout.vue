@@ -7,13 +7,7 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>服の詳細</v-toolbar-title>
-          <v-btn @click="test">test</v-btn>
           <v-spacer></v-spacer>
-          <!--
-          <v-toolbar-items>
-            <v-btn @click="dialog = false"><v-icon></v-icon> 保存 </v-btn>
-          </v-toolbar-items>
-          -->
         </v-toolbar>
         <v-list three-line subheader>
           <v-list-item>
@@ -209,6 +203,7 @@ export default {
       console.log("アップデート");
       this.clothes.tags = this.selectedTag;
       this.clothes.seasons = this.selectedSeason;
+      this.$store.commit("changeAlert", { type: "success", message: "アップデートしました" });
       this.$axios.put("/api/clothes/update/" + this.clothes.id, { data: this.clothes }).then((res) => {
         console.log(res.data);
       });

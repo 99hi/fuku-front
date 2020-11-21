@@ -4,8 +4,6 @@
       <v-toolbar-title>追加</v-toolbar-title>
     </v-toolbar>
 
-    <alert ref="alert"></alert>
-
     <div class="select-photo">
       <croppa ref="croppa" v-model="myCroppa" canvas-color="transparent" placeholder="写真を選択してください" :quality="1" :width="300" :height="300" :accept="'image/*'" @file-type-mismatch="onFileTypeMismatch" @new-image-drawn="handleNewImage" @image-remove="handleImageRemove"></croppa>
 
@@ -59,12 +57,7 @@
 </template>
 
 <script>
-import alert from "~/components/alert.vue";
-
 export default {
-  components: {
-    alert,
-  },
   data() {
     return {
       upUrl: "",
@@ -184,7 +177,7 @@ export default {
         this.btnDisabled = true;
         this.upUrl = res.data.secure_url;
         this.publicId = res.data.public_id;
-        this.$refs.alert.show("success", "アップロードしました");
+        this.$store.commit("changeAlert", { type: "success", message: "アップロードしました" });
         this.loading = false;
 
         //データベース追加

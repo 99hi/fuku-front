@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <alert ref="alert"></alert>
     <!-- ヘッダー -->
 
     <!-- メイン -->
@@ -16,10 +17,12 @@
 <script>
 import Header from "~/components/header.vue";
 import BottomNav from "~/components/bottomNav.vue";
+import alert from "~/components/alert.vue";
 export default {
   componets: {
     Header,
     BottomNav,
+    alert,
   },
   data() {
     return {};
