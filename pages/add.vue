@@ -60,8 +60,6 @@
 export default {
   data() {
     return {
-      upUrl: "",
-      publicId: "",
       myCroppa: null,
       imgUrl: "",
       category: ["トップス", "アウター", "パンツ", "シューズ"],
@@ -151,7 +149,7 @@ export default {
     },
     onFileTypeMismatch(file) {
       console.log("ファイルが違う");
-      this.$refs.alert.show("error", "jpg,png形式でアップして下さい");
+      this.$store.commit("changeAlert", { type: "error", message: "jpg,png形式でアップして下さい" });
     },
     generateImage() {
       let url = this.myCroppa.generateDataUrl();
@@ -175,17 +173,16 @@ export default {
         this.$refs.resizeImg.src = "";
         this.myCroppa.refresh();
         this.btnDisabled = true;
-        this.upUrl = res.data.secure_url;
-        this.publicId = res.data.public_id;
         this.$store.commit("changeAlert", { type: "success", message: "アップロードしました" });
         this.loading = false;
 
         //データベース追加
         this.$axios
           .post("/api/clothes/add", {
-            url: this.upUrl,
+            url: res.data.secure_url,
             category: this.selectedCategory,
             color: this.selectedColor ? this.selectedColor : null,
+            cloudinary_id: res.data.public_id,
             seasons: this.selectedSeason ? this.selectedSeason : null,
             tags: this.selectedTags ? this.selectedTags : null,
           })

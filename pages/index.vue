@@ -1,14 +1,20 @@
 <template>
   <v-card style="position: relative">
     <div class="closet-top-bar">
+      <!-- カテゴリーごとのタブ表示 -->
       <v-tabs color="red darken-1" centered　show-arrows v-model="tab">
         <v-tab v-for="(category, key) in categoryList" :key="key">
           {{ category }}
         </v-tab>
       </v-tabs>
+      <!-- メニューボタン -->
       <div class="closet-menu">
-        <closetSort @filter="applyFilter"></closetSort>
-        <v-btn @click="test">test</v-btn>
+        <div class="closet-menu-item">
+          <v-btn text @click="coordinateFlag = !coordinateFlag" color="red darken-1"><v-icon color="red darken-1">mdi-hanger</v-icon>コーデ追加</v-btn>
+        </div>
+        <div class="closet-menu-item">
+          <closetSort @filter="applyFilter"></closetSort>
+        </div>
       </div>
     </div>
     <clothesAbout ref="clothesAbout"></clothesAbout>
@@ -16,23 +22,46 @@
       <v-tab-item v-for="(category, key) in categoryList" :key="key" class="">
         <v-container fluid>
           <v-row>
-            <v-col v-for="clothes in filteredClothes[tab]" :key="clothes.id" cols="4" md="4" class="pa-2">
+            <v-col v-for="clothes in filteredClothes[tab]" :key="clothes.id" cols="4" md="4" class="pa-2 clothes">
+              <v-checkbox v-if="coordinateFlag" v-model="selectedCoordinate" :value="clothes" hide-details class="mt-0 checkbox" clothes color="red darken-1"></v-checkbox>
               <v-img :src="clothes.url" :lazy-src="clothes.url" aspect-ratio="1" @click="openAbout(clothes)"></v-img>
             </v-col>
           </v-row>
         </v-container>
       </v-tab-item>
     </v-tabs-items>
+
+    <!-- コーディネートで選択した服を表示 v-bottom-sheet -->
+    <div tabindex="-1" class="v-dialog__content v-dialog__content--active" style="z-index: 202; height: auto; bottom: 0" v-if="coordinateFlag">
+      <div class="v-dialog v-bottom-sheet v-bottom-sheet--inset v-dialog--active v-dialog--persistent">
+        <v-sheet class="text-center" height="70px" width="100vw">
+          <v-row class="pa-1">
+            <v-col cols="2" v-for="clothes in limitCoordinate" :key="clothes.id" class="pa-0 mx-1">
+              <v-badge icon="mdi-close" offset-x="20" offset-y="20" @click.native="selectCancel(clothes)" color="red darken-1">
+                <v-img :src="clothes.url" height="50px" width="50px" class="mx-auto"></v-img>
+              </v-badge>
+            </v-col>
+            <v-col cols="1" class="" style="position: absolute; right: 75px">
+              <v-badge :content="selectedCoordinate.length" :value="selectedCoordinate.length" color="red darken-1" overlap>
+                <coordinateAdd :data="selectedCoordinate"></coordinateAdd>
+              </v-badge>
+            </v-col>
+          </v-row>
+        </v-sheet>
+      </div>
+    </div>
   </v-card>
 </template>
 
 <script>
 import closetSort from "~/components/closetSort.vue";
 import clothesAbout from "~/components/clothesAbout.vue";
+import coordinateAdd from "~/components/coordinateAdd";
 export default {
   components: {
     closetSort,
     clothesAbout,
+    coordinateAdd,
   },
   data() {
     return {
@@ -43,6 +72,8 @@ export default {
       active: "トップス",
       position: [0, 0, 0, 0],
       dialog: false,
+      coordinateFlag: false,
+      selectedCoordinate: [],
     };
   },
   created() {
@@ -70,7 +101,6 @@ export default {
       // 現在アクティブなタブのスクロール位置を保持
       this.position[this.tab] = window.scrollY;
     },
-    test() {},
     applyFilter(selectedcolor, selectedSeason, dateSort, tags) {
       console.log("色：" + selectedcolor);
       console.log("シーズン：" + selectedSeason);
@@ -168,6 +198,18 @@ export default {
         return resultData;
       }
     },
+    selectCancel(clothes) {
+      this.selectedCoordinate.forEach((value, index) => {
+        if (clothes.id == value.id) {
+          this.selectedCoordinate.splice(index, 1);
+        }
+      });
+    },
+  },
+  computed: {
+    limitCoordinate() {
+      return this.selectedCoordinate.slice(0, 4);
+    },
   },
   watch: {
     // activeの変更を検知
@@ -183,10 +225,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .closet-top-bar {
   position: fixed;
   top: 0;
+  left: 0;
   z-index: 1;
   background-color: #fff;
   width: 100%;
@@ -196,12 +239,15 @@ export default {
   height: 40px;
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   font-size: 14px;
   color: #e53935;
   background-color: #fff;
   border-bottom: 1px solid gainsboro;
+}
+.closet-menu-item {
+  cursor: pointer;
 }
 
 .closet-tabs-items {
@@ -211,5 +257,20 @@ export default {
 
 .v-overlay {
   height: 100vh;
+}
+
+.clothes {
+  position: relative;
+  z-index: 0;
+}
+
+.clothes > .checkbox {
+  position: absolute;
+  top: 7px;
+  right: 5px;
+  z-index: 1;
+}
+.checkbox i {
+  font-size: 30px !important;
 }
 </style>
