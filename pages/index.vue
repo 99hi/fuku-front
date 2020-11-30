@@ -22,7 +22,7 @@
       <v-tab-item v-for="(category, key) in categoryList" :key="key" class="">
         <v-container fluid>
           <v-row>
-            <v-col v-for="clothes in filteredClothes[tab]" :key="clothes.id" cols="4" md="4" class="pa-2 clothes">
+            <v-col v-for="clothes in getFilteredClothes[tab]" :key="clothes.id" cols="4" md="4" class="pa-2 clothes">
               <v-checkbox v-if="coordinateFlag" v-model="selectedCoordinate" :value="clothes" hide-details class="mt-0 checkbox" clothes color="red darken-1"></v-checkbox>
               <v-img :src="clothes.url" :lazy-src="clothes.url" aspect-ratio="1" @click="openAbout(clothes)"></v-img>
             </v-col>
@@ -66,8 +66,6 @@ export default {
   data() {
     return {
       tab: 0,
-      clothesList: Object,
-      filteredClothes: Object,
       categoryList: ["トップス", "アウター", "パンツ", "シューズ"],
       active: "トップス",
       position: [0, 0, 0, 0],
@@ -76,9 +74,7 @@ export default {
       selectedCoordinate: [],
     };
   },
-  created() {
-    this.allClothes();
-  },
+
   mounted() {
     // イベントリスナの追加
     window.addEventListener("scroll", this.handleScroll);
@@ -88,12 +84,6 @@ export default {
     window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
-    allClothes() {
-      this.$axios.get("/api/clothes/get").then((res) => {
-        this.clothesList = res.data;
-        this.filteredClothes = res.data;
-      });
-    },
     openAbout(clothes) {
       this.$refs.clothesAbout.showAbout(clothes);
     },
@@ -105,7 +95,8 @@ export default {
       console.log("色：" + selectedcolor);
       console.log("シーズン：" + selectedSeason);
       //targetDataに対してソートをかけていく
-      let targetData = Object.assign({}, this.clothesList);
+      //let targetData = this.clothesList;
+      let targetData = this.$store.getters["clothes/getClothesList"];
 
       //タグ検索
       if (tags.length !== 0) {
@@ -127,10 +118,11 @@ export default {
         console.log("シーズンは指定されていません");
       }
       //日付ソート
-      targetData = this.dateSort(targetData, dateSort);
-
+      if (dateSort === "true") {
+        targetData = targetData.map((item) => item.slice().reverse());
+      }
       //フィルターをかけたデータを適用
-      this.filteredClothes = targetData;
+      this.$store.commit("clothes/setFilteredClothes", targetData);
       console.log(targetData);
     },
     //タグ検索
@@ -168,36 +160,6 @@ export default {
       });
       return resultData;
     },
-    //日付ソート
-    dateSort(targetData, dateSort) {
-      if (dateSort === "true") {
-        console.log("古い順でソート");
-        let resultData = [];
-        this.categoryList.forEach((value, index) => {
-          const data = targetData[index].sort((a, b) => {
-            let adate = Date.parse(a.created_at.substr(0, 19).replace("T", " "));
-            let bdate = Date.parse(b.created_at.substr(0, 19).replace("T", " "));
-
-            return adate - bdate;
-          });
-          resultData.push(data);
-        });
-        return resultData;
-      } else {
-        console.log("新しい順でソート");
-        let resultData = [];
-        this.categoryList.forEach((value, index) => {
-          const data = targetData[index].sort((a, b) => {
-            let adate = Date.parse(a.created_at.substr(0, 19).replace("T", " "));
-            let bdate = Date.parse(b.created_at.substr(0, 19).replace("T", " "));
-
-            return bdate - adate;
-          });
-          resultData.push(data);
-        });
-        return resultData;
-      }
-    },
     selectCancel(clothes) {
       this.selectedCoordinate.forEach((value, index) => {
         if (clothes.id == value.id) {
@@ -209,6 +171,12 @@ export default {
   computed: {
     limitCoordinate() {
       return this.selectedCoordinate.slice(0, 4);
+    },
+    getClothesList() {
+      return this.$store.getters["clothes/getClothesList"];
+    },
+    getFilteredClothes() {
+      return this.$store.getters["clothes/getFilteredClothes"];
     },
   },
   watch: {

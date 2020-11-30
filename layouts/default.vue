@@ -31,6 +31,9 @@ export default {
     console.log(process.env.NODE_ENV);
     console.log(process.env.BASE_URL);
   },
+  created() {
+    this.$store.dispatch("clothes/checkClothes");
+  },
 };
 </script>
 

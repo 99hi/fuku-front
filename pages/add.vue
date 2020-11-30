@@ -192,6 +192,7 @@ export default {
             this.selectedColor = "";
             this.selectedSeason = [];
             this.selectedTags = [];
+            this.$store.dispatch("clothes/checkClothes");
           });
       });
     },

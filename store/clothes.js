@@ -1,22 +1,34 @@
 export const state = () => ({
-  clothesList: Object
+  clothesList: [],
+  filteredClothes: []
 })
 
 export const getters = {
   getClothesList(state) {
     return state.clothesList
+  },
+
+  getFilteredClothes(state) {
+    return state.filteredClothes
   }
 }
 
 export const mutations = {
   setClothes(state, payload) {
     state.clothesList = payload
+  },
+
+  setFilteredClothes(state, payload) {
+    state.filteredClothes = payload.slice()
+    console.log("setFilteredClothes実行")
   }
 }
 
 export const actions = {
-  async getClothes() {
-    const clothes = await this.$axios.get('/api/clothes/get')
+  async checkClothes({ commit, state }) {
+    const clothes = await this.$axios.get('/api/clothes/get').then((res) => { return res.data })
+    console.log(clothes)
     commit('setClothes', clothes)
+    commit('setFilteredClothes', clothes)
   }
 }

@@ -190,7 +190,7 @@ export default {
       console.log("test");
       console.log(clothes);
       this.dialog = true;
-      this.clothes = clothes;
+      this.clothes = Object.assign({}, clothes);
       this.selectedSeason = clothes.seasons.map((season) => season.name);
       this.selectedTag = clothes.tags.map((tag) => tag.name);
     },
@@ -206,6 +206,7 @@ export default {
       this.$store.commit("changeAlert", { type: "success", message: "アップデートしました" });
       this.$axios.put("/api/clothes/update/" + this.clothes.id, { data: this.clothes }).then((res) => {
         console.log(res.data);
+        this.$store.dispatch("clothes/checkClothes");
       });
     },
     delete() {
