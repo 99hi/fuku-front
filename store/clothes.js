@@ -21,6 +21,11 @@ export const mutations = {
   setFilteredClothes(state, payload) {
     state.filteredClothes = payload.slice()
     console.log("setFilteredClothes実行")
+  },
+
+  resetFilteredClothes(state) {
+    console.log("リセット")
+    state.filteredClothes = state.clothesList
   }
 }
 

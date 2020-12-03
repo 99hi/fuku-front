@@ -82,6 +82,8 @@ export default {
   destroyed() {
     // イベントリスナの削除
     window.removeEventListener("scroll", this.handleScroll);
+
+    this.$store.commit("clothes/resetFilteredClothes");
   },
   methods: {
     openAbout(clothes) {
