@@ -10,7 +10,12 @@
       <!-- メニューボタン -->
       <div class="closet-menu">
         <div class="closet-menu-item">
-          <v-btn text @click="coordinateFlag = !coordinateFlag" color="red darken-1"><v-icon color="red darken-1">mdi-hanger</v-icon>コーデ追加</v-btn>
+          <v-btn
+            text
+            @click="coordinateFlag = !coordinateFlag"
+            color="red darken-1"
+            ><v-icon color="red darken-1">mdi-hanger</v-icon>コーデ追加</v-btn
+          >
         </div>
         <div class="closet-menu-item">
           <closetSort @filter="applyFilter"></closetSort>
@@ -22,9 +27,28 @@
       <v-tab-item v-for="(category, key) in categoryList" :key="key" class="">
         <v-container fluid>
           <v-row>
-            <v-col v-for="clothes in getFilteredClothes[tab]" :key="clothes.id" cols="4" md="4" class="pa-2 clothes">
-              <v-checkbox v-if="coordinateFlag" v-model="selectedCoordinate" :value="clothes" hide-details class="mt-0 checkbox" clothes color="red darken-1"></v-checkbox>
-              <v-img :src="clothes.url" :lazy-src="clothes.url" aspect-ratio="1" @click="openAbout(clothes)"></v-img>
+            <v-col
+              v-for="clothes in getFilteredClothes[tab]"
+              :key="clothes.id"
+              cols="4"
+              md="4"
+              class="pa-2 clothes"
+            >
+              <v-checkbox
+                v-if="coordinateFlag"
+                v-model="selectedCoordinate"
+                :value="clothes"
+                hide-details
+                class="mt-0 checkbox"
+                clothes
+                color="red darken-1"
+              ></v-checkbox>
+              <v-img
+                :src="clothes.url"
+                :lazy-src="clothes.url"
+                aspect-ratio="1"
+                @click="openAbout(clothes)"
+              ></v-img>
             </v-col>
           </v-row>
         </v-container>
@@ -32,18 +56,49 @@
     </v-tabs-items>
 
     <!-- コーディネートで選択した服を表示 v-bottom-sheet -->
-    <div tabindex="-1" class="v-dialog__content v-dialog__content--active" style="z-index: 202; height: auto; bottom: 0" v-if="coordinateFlag">
-      <div class="v-dialog v-bottom-sheet v-bottom-sheet--inset v-dialog--active v-dialog--persistent">
+    <div
+      tabindex="-1"
+      class="v-dialog__content v-dialog__content--active"
+      style="z-index: 202; height: auto; bottom: 0"
+      v-if="coordinateFlag"
+    >
+      <div
+        class="v-dialog v-bottom-sheet v-bottom-sheet--inset v-dialog--active v-dialog--persistent"
+      >
         <v-sheet class="text-center" height="70px" width="100vw">
           <v-row class="pa-1">
-            <v-col cols="2" v-for="clothes in limitCoordinate" :key="clothes.id" class="pa-0 mx-1">
-              <v-badge icon="mdi-close" offset-x="20" offset-y="20" @click.native="selectCancel(clothes)" color="red darken-1">
-                <v-img :src="clothes.url" height="50px" width="50px" class="mx-auto"></v-img>
+            <v-col
+              cols="2"
+              v-for="clothes in limitCoordinate"
+              :key="clothes.id"
+              class="pa-0 mx-1"
+            >
+              <v-badge
+                icon="mdi-close"
+                offset-x="20"
+                offset-y="20"
+                @click.native="selectCancel(clothes)"
+                color="red darken-1"
+              >
+                <v-img
+                  :src="clothes.url"
+                  height="50px"
+                  width="50px"
+                  class="mx-auto"
+                ></v-img>
               </v-badge>
             </v-col>
             <v-col cols="1" class="" style="position: absolute; right: 75px">
-              <v-badge :content="selectedCoordinate.length" :value="selectedCoordinate.length" color="red darken-1" overlap>
-                <coordinateAdd :data="selectedCoordinate"></coordinateAdd>
+              <v-badge
+                :content="selectedCoordinate.length"
+                :value="selectedCoordinate.length"
+                color="red darken-1"
+                overlap
+              >
+                <coordinateAdd
+                  :data="selectedCoordinate"
+                  @coordinateReset="selectReset"
+                ></coordinateAdd>
               </v-badge>
             </v-col>
           </v-row>
@@ -156,7 +211,8 @@ export default {
       this.categoryList.forEach((value, index) => {
         const data = targetData[index].filter((value, index) => {
           const seasonList = value.seasons.map((season) => season.name);
-          if (seasonList.some((season) => selectedSeason.includes(season))) return value;
+          if (seasonList.some((season) => selectedSeason.includes(season)))
+            return value;
         });
         resultData.push(data);
       });
@@ -168,6 +224,12 @@ export default {
           this.selectedCoordinate.splice(index, 1);
         }
       });
+    },
+    selectReset() {
+      console.log("coordinateReset実行");
+      this.selectedCoordinate = [];
+      this.coordinateFlag = false;
+      this.$router.push("/coordinate");
     },
   },
   computed: {

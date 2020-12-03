@@ -1,7 +1,6 @@
 export const state = () => ({
   clothesList: [],
   filteredClothes: [],
-  selectedClothes: []
 })
 
 export const getters = {
@@ -33,13 +32,6 @@ export const mutations = {
     state.filteredClothes = state.clothesList
   },
 
-  addSelectedClothes(state, payload) {
-    state.selectedClothes.push(payload)
-  },
-
-  deleteSelectedClothes(state, payload) {
-    state.selectedClothes = state.selectedClothes.filter((clothes) => clothes.id !== payload.id)
-  }
 }
 
 export const actions = {
