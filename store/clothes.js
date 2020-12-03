@@ -1,6 +1,7 @@
 export const state = () => ({
   clothesList: [],
   filteredClothes: [],
+  selectedClothes: []
 })
 
 export const getters = {
@@ -26,11 +27,19 @@ export const mutations = {
     state.filteredClothes = payload.slice()
     console.log("setFilteredClothes実行")
   },
-
   resetFilteredClothes(state) {
     console.log("リセット")
     state.filteredClothes = state.clothesList
   },
+
+  setSelectedClothes(state, payload) {
+    state.selectedClothes = payload
+    console.log("setSelectedClotehs実行")
+  },
+  deleteSelectedClothes(state, payload) {
+    console.log("deleteSelectedClothes実行")
+    state.selectedClothes = state.selectedClothes.filter((clothes) => clothes.id !== payload.id)
+  }
 
 }
 

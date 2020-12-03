@@ -30,7 +30,7 @@
           <v-row justify="center" v-show="toggle === 0">
             <div class="stage">
               <vue-draggable-resizable
-                v-for="(clothes, index) in clothesList"
+                v-for="(clothes, index) in selectedCoordinate"
                 :key="clothes.id"
                 :parent="true"
                 :x="clothes.x ? clothes.x : 1"
@@ -38,16 +38,36 @@
                 :w="clothes.w"
                 :h="clothes.h"
                 :draggable="clothes.draggable"
-                class="item"
-                :style="clothes.fillStyle"
                 :min-width="70"
                 :min-height="70"
                 :lock-aspect-ratio="true"
+                :handles="['br']"
                 @resizestop="onResizstop"
                 @dragstop="onDragstop"
                 @activated="onActivated(index)"
+                style="border: 1px"
               >
                 <v-img :src="clothes.url"></v-img>
+
+                <div>
+                  <v-btn
+                    fab
+                    small
+                    dark
+                    color="red darken-1"
+                    class="control-close handle-tl handle"
+                    @click="test(clothes)"
+                    ><v-icon>mdi-close-thick</v-icon></v-btn
+                  >
+                </div>
+
+                <div slot="br">
+                  <v-btn fab small dark color="green" class="control-resize"
+                    ><v-icon
+                      >mdi-arrow-top-left-bottom-right-bold</v-icon
+                    ></v-btn
+                  >
+                </div>
               </vue-draggable-resizable>
             </div>
           </v-row>
@@ -146,6 +166,10 @@ export default {
     };
   },
   methods: {
+    test(clothes) {
+      console.log("削除クリック");
+      this.$store.commit("clothes/deleteSelectedClothes", clothes);
+    },
     async openAdd() {
       console.log("コーディネート追加が実行");
       console.log(this.data);
@@ -157,6 +181,7 @@ export default {
         clothes.x = clothes.x ? clothes.x : 1;
         clothes.y = clothes.y ? clothes.y : 50 * index;
       });
+      this.$store.commit("clothes/setSelectedClothes", this.clothesList);
     },
     add() {
       console.log("add");
@@ -248,12 +273,22 @@ export default {
             type: "success",
             message: "アップロードしました",
           });
-          console.log("エミット実行↓");
-          this.$emit("coordinateReset");
+          this.$store.commit("clothes/setSelectedClothes", []);
+          this.$router.push("/coordinate");
         })
         .catch((e) => {
           console.log("エラー" + e);
         });
+    },
+  },
+  computed: {
+    selectedCoordinate: {
+      get() {
+        return this.$store.getters["clothes/getSelectedClothes"];
+      },
+      set(value) {
+        this.$store.commit("clothes/setSelectedClothes", value);
+      },
     },
   },
 };
@@ -276,5 +311,21 @@ ul {
 
 .center {
   text-align: center;
+}
+
+.control-close {
+  width: 30px;
+  height: 30px;
+  z-index: 1;
+  margin-left: -5px;
+  margin-top: -5px;
+}
+
+.control-resize {
+  width: 30px;
+  height: 30px;
+  z-index: 5;
+  margin-left: -15px;
+  margin-top: -30px;
 }
 </style>

@@ -69,7 +69,7 @@
           <v-row class="pa-1">
             <v-col
               cols="2"
-              v-for="clothes in limitCoordinate"
+              v-for="clothes in selectedCoordinate.slice(0, 4)"
               :key="clothes.id"
               class="pa-0 mx-1"
             >
@@ -95,10 +95,7 @@
                 color="red darken-1"
                 overlap
               >
-                <coordinateAdd
-                  :data="selectedCoordinate"
-                  @coordinateReset="selectReset"
-                ></coordinateAdd>
+                <coordinateAdd :data="selectedCoordinate"></coordinateAdd>
               </v-badge>
             </v-col>
           </v-row>
@@ -126,7 +123,7 @@ export default {
       position: [0, 0, 0, 0],
       dialog: false,
       coordinateFlag: false,
-      selectedCoordinate: [],
+      //selectedCoordinate: [],
     };
   },
 
@@ -219,28 +216,24 @@ export default {
       return resultData;
     },
     selectCancel(clothes) {
-      this.selectedCoordinate.forEach((value, index) => {
-        if (clothes.id == value.id) {
-          this.selectedCoordinate.splice(index, 1);
-        }
-      });
-    },
-    selectReset() {
-      console.log("coordinateReset実行");
-      this.selectedCoordinate = [];
-      this.coordinateFlag = false;
-      this.$router.push("/coordinate");
+      this.$store.commit("clothes/deleteSelectedClothes", clothes);
     },
   },
   computed: {
-    limitCoordinate() {
-      return this.selectedCoordinate.slice(0, 4);
-    },
     getClothesList() {
       return this.$store.getters["clothes/getClothesList"];
     },
     getFilteredClothes() {
       return this.$store.getters["clothes/getFilteredClothes"];
+    },
+    selectedCoordinate: {
+      get() {
+        return this.$store.getters["clothes/getSelectedClothes"];
+      },
+      set(value) {
+        console.log(value);
+        this.$store.commit("clothes/setSelectedClothes", value);
+      },
     },
   },
   watch: {
