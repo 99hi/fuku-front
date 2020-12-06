@@ -4,14 +4,9 @@ const {
   CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUDNAME,
   CLOUDINARY_UPLOADPRESET,
-  BASE_URL,
-  BROWSER_BASE_URL,
+  //BASE_URL,
+  //API_URL
 } = process.env;
-
-
-// const environment = process.env.NODE_ENV
-// const envSet = require(`./env.${environment}.js`)
-
 
 export default {
   server: {
@@ -45,13 +40,12 @@ export default {
   ],
 
   env: {
-    //baseUrl: process.env.NODE_ENV === "production" ? "http://stylie.ap-northeast-1.elasticbeanstalk.com/api" : "http://localhost:8000/api",
     CLOUDINARY_API_KEY,
     CLOUDINARY_CLOUDNAME,
     CLOUDINARY_UPLOADPRESET,
-    BASE_URL
+    //BASE_URL,
+    //API_URL
   },
-
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
 
@@ -73,22 +67,8 @@ export default {
     '@nuxtjs/proxy'
   ],
 
-  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseUrl: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
-    proxy: true,  // 追加
-    credentials: true,
-    prefix: '/',
-  },
-
-  proxy: {
-    //'/api': process.env.NODE_ENV === "production" ? "http://stylie.ap-northeast-1.elasticbeanstalk.com/" : "http://localhost:8000/",
-    '/api': {
-      //'target': envSet.BASE_URL,
-      target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
-      secure: false,
-      changeOrigin: true,
-    }
+    baseURL: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/"
   },
 
 
