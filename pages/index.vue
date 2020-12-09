@@ -10,10 +10,7 @@
       <!-- メニューボタン -->
       <div class="closet-menu">
         <div class="closet-menu-item">
-          <v-btn
-            text
-            @click="coordinateFlag = !coordinateFlag"
-            color="red darken-1"
+          <v-btn text @click="coordinateFlag = !coordinateFlag" color="red darken-1"
             ><v-icon color="red darken-1">mdi-hanger</v-icon>コーデ追加</v-btn
           >
         </div>
@@ -63,7 +60,7 @@
       v-if="coordinateFlag"
     >
       <div
-        class="v-dialog v-bottom-sheet v-bottom-sheet--inset v-dialog--active v-dialog--persistent"
+        class="v-dialog v-bottom-sheet v-bottom-sheet--inset v-dialog--active v-dialog--persistent selected-clothes"
       >
         <v-sheet class="text-center" height="70px" width="100vw">
           <v-row class="pa-1">
@@ -208,8 +205,7 @@ export default {
       this.categoryList.forEach((value, index) => {
         const data = targetData[index].filter((value, index) => {
           const seasonList = value.seasons.map((season) => season.name);
-          if (seasonList.some((season) => selectedSeason.includes(season)))
-            return value;
+          if (seasonList.some((season) => selectedSeason.includes(season))) return value;
         });
         resultData.push(data);
       });
@@ -297,5 +293,11 @@ export default {
 }
 .checkbox i {
   font-size: 30px !important;
+}
+
+.selected-clothes {
+  position: fixed;
+  bottom: 0;
+  margin: 0;
 }
 </style>
