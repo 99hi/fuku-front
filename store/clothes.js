@@ -1,12 +1,22 @@
 export const state = () => ({
   clothesList: [],
   filteredClothes: [],
-  selectedClothes: []
+  selectedClothes: [],
+  shareCloset: [],
+  shareUser: 0
 })
 
 export const getters = {
   getClothesList(state) {
-    return state.clothesList
+    if (state.shareUser === 0) {
+      console.log("自分のクローゼットを返す")
+      console.log(state.clothesList)
+      return state.clothesList
+    } else {
+      console.log("シェアのクローゼットを返す")
+      console.log(state.shareCloset[state.shareUser - 1])
+      return state.shareCloset[state.shareUser - 1]
+    }
   },
 
   getFilteredClothes(state) {
@@ -15,10 +25,15 @@ export const getters = {
 
   getSelectedClothes(state) {
     return state.selectedClothes;
-  }
+  },
+
+  getShareClothes(state) {
+    return state.shareClothes
+  },
 }
 
 export const mutations = {
+  //クローゼット
   setClothes(state, payload) {
     state.clothesList = payload
   },
@@ -29,9 +44,15 @@ export const mutations = {
   },
   resetFilteredClothes(state) {
     console.log("リセット")
-    state.filteredClothes = state.clothesList
+    if (state.shareUser === 0) {
+      state.filteredClothes = state.clothesList
+    } else {
+      state.filteredClothes = state.shareCloset[state.shareUser - 1]
+    }
+
   },
 
+  //コーディネート追加
   setSelectedClothes(state, payload) {
     state.selectedClothes = payload
     console.log("setSelectedClotehs実行")
@@ -39,8 +60,20 @@ export const mutations = {
   deleteSelectedClothes(state, payload) {
     console.log("deleteSelectedClothes実行")
     state.selectedClothes = state.selectedClothes.filter((clothes) => clothes.id !== payload.id)
-  }
+  },
 
+  //シェア
+  setShareCloset(state, closet) {
+    state.shareCloset = closet
+  },
+  changeCloset(state, payload) {
+    state.shareUser = payload
+    if (state.shareUser === 0) {
+      state.filteredClothes = state.clothesList
+    } else {
+      state.filteredClothes = state.shareCloset[state.shareUser - 1]
+    }
+  }
 }
 
 export const actions = {
@@ -49,5 +82,11 @@ export const actions = {
     console.log(clothes)
     commit('setClothes', clothes)
     commit('setFilteredClothes', clothes)
+  },
+
+  async shareCloset({ commit, state }) {
+    const closet = await this.$axios.get('/api/share').then((res) => { return res.data })
+    console.log(closet)
+    commit('setShareCloset', closet)
   }
 }

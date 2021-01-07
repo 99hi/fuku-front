@@ -1,6 +1,11 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
       <v-card>
         <v-toolbar>
           <v-btn icon @click="dialog = false">
@@ -16,7 +21,20 @@
               <div style="height: 460px; margin: 0 auto">
                 <v-img v-if="coordinate.url" :src="coordinate.url"></v-img>
                 <div v-else>
-                  <vue-draggable-resizable v-for="clothes in coordinate.clothes" :key="clothes.id" :parent="true" :x="clothes.x" :y="clothes.y" :w="clothes.width" :h="clothes.height" class="coordinate-item" :style="clothes.fillStyle" :lock-aspect-ratio="true" :resizable="false" :draggable="false">
+                  <vue-draggable-resizable
+                    v-for="clothes in coordinate.clothes"
+                    :key="clothes.id"
+                    :parent="true"
+                    :x="clothes.x"
+                    :y="clothes.y"
+                    :w="clothes.width"
+                    :h="clothes.height"
+                    class="coordinate-item"
+                    :style="clothes.fillStyle"
+                    :lock-aspect-ratio="true"
+                    :resizable="false"
+                    :draggable="false"
+                  >
                     <v-img :src="clothes.url"></v-img>
                   </vue-draggable-resizable>
                 </div>
@@ -42,10 +60,34 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-container class="px-0" fluid>
-                <v-checkbox v-model="selectedSeason" label="春" color="#F06292" value="春" hide-details></v-checkbox>
-                <v-checkbox v-model="selectedSeason" label="夏" color="#03A9F4" value="夏" hide-details></v-checkbox>
-                <v-checkbox v-model="selectedSeason" label="秋" color="#795548" value="秋" hide-details></v-checkbox>
-                <v-checkbox v-model="selectedSeason" label="冬" color="#607D8B" value="冬" hide-details></v-checkbox>
+                <v-checkbox
+                  v-model="selectedSeason"
+                  label="春"
+                  color="#F06292"
+                  value="春"
+                  hide-details
+                ></v-checkbox>
+                <v-checkbox
+                  v-model="selectedSeason"
+                  label="夏"
+                  color="#03A9F4"
+                  value="夏"
+                  hide-details
+                ></v-checkbox>
+                <v-checkbox
+                  v-model="selectedSeason"
+                  label="秋"
+                  color="#795548"
+                  value="秋"
+                  hide-details
+                ></v-checkbox>
+                <v-checkbox
+                  v-model="selectedSeason"
+                  label="冬"
+                  color="#607D8B"
+                  value="冬"
+                  hide-details
+                ></v-checkbox>
               </v-container>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -65,8 +107,8 @@
           </v-slide-group>
         </v-sheet>
 
-        <v-row justify="center" class="ma-4">
-          <v-btn width="40%" color="red darken-1" dark>保存</v-btn>
+        <v-row justify="center" class="pa-2 mx-0" style="width: 100vw">
+          <v-btn color="red darken-1" dark>保存</v-btn>
         </v-row>
       </v-card>
     </v-dialog>

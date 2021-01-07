@@ -1,15 +1,22 @@
 <template>
   <div>
-    <v-btn @click="openAdd" small max-width="80px" min-height="32px">選択中<v-icon>mdi-chevron-right</v-icon></v-btn>
+    <v-btn @click="openAdd" small max-width="80px" min-height="32px"
+      >選択中<v-icon>mdi-chevron-right</v-icon></v-btn
+    >
 
     <v-container fluid>
-      <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-dialog
+        v-model="dialog"
+        fullscreen
+        hide-overlay
+        transition="dialog-bottom-transition"
+      >
         <v-card>
           <v-toolbar>
             <v-btn icon @click="dialog = false">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
-            <v-toolbar-title>コーディネートの追加 {{ active }}</v-toolbar-title>
+            <v-toolbar-title>コーディネートの追加</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
 
@@ -46,40 +53,92 @@
                 <v-img :src="clothes.url"></v-img>
 
                 <div>
-                  <v-btn fab small dark color="red darken-1" class="control-close handle-tl handle" @click="test(clothes)"><v-icon small>mdi-close-thick</v-icon></v-btn>
+                  <v-btn
+                    fab
+                    small
+                    dark
+                    color="red darken-1"
+                    class="control-close handle-tl handle"
+                    @click="test(clothes)"
+                    ><v-icon small>mdi-close-thick</v-icon></v-btn
+                  >
                 </div>
 
                 <div slot="br">
-                  <v-btn fab small dark color="green" class="control-resize"><v-icon small>mdi-arrow-top-left-bottom-right-bold</v-icon></v-btn>
+                  <v-btn fab small dark color="green" class="control-resize"
+                    ><v-icon small>mdi-arrow-top-left-bottom-right-bold</v-icon></v-btn
+                  >
                 </div>
               </vue-draggable-resizable>
             </div>
           </v-row>
           <!-- コーデ画像 -->
           <v-row v-show="toggle === 1" justify="center">
-            <croppa ref="croppa" v-model="myCroppa" canvas-color="transparent" placeholder="写真を選択してください" :quality="1" :width="300" :height="400" :accept="'image/*'" @file-type-mismatch="onFileTypeMismatch" @new-image-drawn="handleNewImage" @image-remove="handleImageRemove"></croppa>
+            <croppa
+              ref="croppa"
+              v-model="myCroppa"
+              canvas-color="transparent"
+              placeholder="写真を選択してください"
+              :quality="1"
+              :width="300"
+              :height="400"
+              :accept="'image/*'"
+              @file-type-mismatch="onFileTypeMismatch"
+              @new-image-drawn="handleNewImage"
+              @image-remove="handleImageRemove"
+            ></croppa>
           </v-row>
 
           <v-row justify="center" class="px-5">
             <v-col cols="3">
-              <v-checkbox v-model="selectedSeason" label="春" color="#F06292" value="1" hide-details></v-checkbox>
+              <v-checkbox
+                v-model="selectedSeason"
+                label="春"
+                color="#F06292"
+                value="1"
+                hide-details
+              ></v-checkbox>
             </v-col>
 
             <v-col cols="3">
-              <v-checkbox v-model="selectedSeason" label="夏" color="#03A9F4" value="2" hide-details></v-checkbox>
+              <v-checkbox
+                v-model="selectedSeason"
+                label="夏"
+                color="#03A9F4"
+                value="2"
+                hide-details
+              ></v-checkbox>
             </v-col>
 
             <v-col cols="3">
-              <v-checkbox v-model="selectedSeason" label="秋" color="#795548" value="3" hide-details></v-checkbox>
+              <v-checkbox
+                v-model="selectedSeason"
+                label="秋"
+                color="#795548"
+                value="3"
+                hide-details
+              ></v-checkbox>
             </v-col>
 
             <v-col cols="3">
-              <v-checkbox v-model="selectedSeason" label="冬" color="#607D8B" value="4" hide-details></v-checkbox>
+              <v-checkbox
+                v-model="selectedSeason"
+                label="冬"
+                color="#607D8B"
+                value="4"
+                hide-details
+              ></v-checkbox>
             </v-col>
           </v-row>
 
           <v-row justify="center">
-            <v-btn class="mt-4" @click="upload(), (loading = true)" :loading="loading" :disabled="btnDisabled === true && toggle === 1">コーデ追加</v-btn>
+            <v-btn
+              class="mt-4"
+              @click="upload(), (loading = true)"
+              :loading="loading"
+              :disabled="btnDisabled === true && toggle === 1"
+              >コーデ追加</v-btn
+            >
           </v-row>
         </v-card>
       </v-dialog>
@@ -181,15 +240,20 @@ export default {
       //画像のアップロード
       if (url) {
         console.log("cloudinary画像アップ");
-        await this.$axios.post(`https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUDNAME}/upload`, formData).then((res) => {
-          console.log("Success!!");
-          console.log(res.data);
-          this.upUrl = res.data.secure_url;
-          this.cloudinary_id = res.data.public_id;
-          this.myCroppa.refresh();
+        await this.$axios
+          .post(
+            `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUDNAME}/upload`,
+            formData
+          )
+          .then((res) => {
+            console.log("Success!!");
+            console.log(res.data);
+            this.upUrl = res.data.secure_url;
+            this.cloudinary_id = res.data.public_id;
+            this.myCroppa.refresh();
 
-          this.loading = false;
-        });
+            this.loading = false;
+          });
       }
       //データベース追加
       console.log("データベース追加");

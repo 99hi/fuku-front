@@ -1,6 +1,23 @@
 <template>
   <v-card style="position: relative">
     <div class="closet-top-bar">
+      <!-- ユーザーの切り替え -->
+      <v-menu offset-y transition="slide-y-transition">
+        <template v-slot:activator="{ on }">
+          <v-btn color="black" text dark v-on="on" dense width="100vw"
+            >{{ selectUser
+            }}<v-icon color="red darken-1">mdi-arrow-down-drop-circle-outline</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item v-for="(user, index) in users" :key="index">
+            <v-list-item-title @click="(selectUser = user), changeCloset(index)">{{
+              user
+            }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <!-- カテゴリーごとのタブ表示 -->
       <v-tabs color="red darken-1" centered　show-arrows v-model="tab">
         <v-tab v-for="(category, key) in categoryList" :key="key">
@@ -20,15 +37,16 @@
       </div>
     </div>
     <clothesAbout ref="clothesAbout"></clothesAbout>
+
+    <!-- 服 -->
     <v-tabs-items v-model="tab" class="px-2 closet-tabs-items">
       <v-tab-item v-for="(category, key) in categoryList" :key="key" class="">
         <v-container fluid>
-          <v-row>
+          <v-row style="width: 100vw">
             <v-col
               v-for="clothes in getFilteredClothes[tab]"
               :key="clothes.id"
               cols="4"
-              md="4"
               class="pa-2 clothes"
             >
               <v-checkbox
@@ -120,7 +138,8 @@ export default {
       position: [0, 0, 0, 0],
       dialog: false,
       coordinateFlag: false,
-      //selectedCoordinate: [],
+      users: ["自分", "兄"],
+      selectUser: "自分",
     };
   },
 
@@ -146,7 +165,6 @@ export default {
       console.log("色：" + selectedcolor);
       console.log("シーズン：" + selectedSeason);
       //targetDataに対してソートをかけていく
-      //let targetData = this.clothesList;
       let targetData = this.$store.getters["clothes/getClothesList"];
 
       //タグ検索
@@ -214,6 +232,9 @@ export default {
     selectCancel(clothes) {
       this.$store.commit("clothes/deleteSelectedClothes", clothes);
     },
+    changeCloset(user) {
+      this.$store.commit("clothes/changeCloset", user);
+    },
   },
   computed: {
     getClothesList() {
@@ -253,7 +274,7 @@ export default {
   left: 0;
   z-index: 1;
   background-color: #fff;
-  width: 100%;
+  width: 100vw;
 }
 
 .closet-menu {
@@ -272,7 +293,7 @@ export default {
 }
 
 .closet-tabs-items {
-  margin-top: 90px;
+  margin-top: 124px;
   min-height: 100vh;
 }
 

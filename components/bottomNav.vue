@@ -1,5 +1,12 @@
 <template>
-  <v-bottom-navigation color="red darken-1" height="70px" grow fixed flat class="elevation-0 bottom-nav">
+  <v-bottom-navigation
+    color="red darken-1"
+    height="70px"
+    grow
+    fixed
+    flat
+    class="elevation-0 bottom-nav"
+  >
     <v-btn to="/" class="pb-6">
       <span>closet</span>
       <v-icon>mdi-wardrobe-outline</v-icon>
@@ -33,5 +40,6 @@ export default {
 .bottom-nav {
   border-top: 1px solid gainsboro;
   z-index: 0 !important;
+  width: 100vw;
 }
 </style>

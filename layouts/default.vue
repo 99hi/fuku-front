@@ -34,6 +34,9 @@ export default {
   created() {
     this.$store.dispatch("clothes/checkClothes");
   },
+  mounted() {
+    this.$store.dispatch("clothes/shareCloset");
+  },
 };
 </script>
 
