@@ -4,6 +4,7 @@ const {
   CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUDNAME,
   CLOUDINARY_UPLOADPRESET,
+  baseUrl
   //BASE_URL,
   //API_URL
 } = process.env;
@@ -43,6 +44,7 @@ export default {
     CLOUDINARY_API_KEY,
     CLOUDINARY_CLOUDNAME,
     CLOUDINARY_UPLOADPRESET,
+    baseUrl
     //BASE_URL,
     //API_URL
   },
@@ -67,8 +69,20 @@ export default {
     '@nuxtjs/proxy'
   ],
 
+  
+
+  proxy: {
+    '/api': {
+      target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
+      pathRewrite: {
+          '^/api': '',
+      },
+    },
+  },
   axios: {
-    baseURL: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/"
+    proxy: true,
+    prefix: '/api',
+    credentials: true,
   },
 
 
@@ -106,17 +120,13 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: { url: '/auth/login', method: 'post', propertyName: 'token' },
-          logout: { url: '/auth/logout', method: 'get' },
-          user: { url: '/me', method: 'get', propertyName: 'data' }
+          login: { url: '/api/auth/login', method: 'post', propertyName: 'token' },
+          logout: { url: '/api/auth/logout', method: 'post' },
+          user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
         },
-        //tokenRequired: true,
-        //tokenType: 'bearer'
+        // tokenRequired: true,
+        // tokenType: 'bearer'
       }
-    },
-    redirect: {
-      login: '/auth/login', // 未ログイン時に認証ルートへアクセスした際のリダイレクトURL
-      home: '/' // ログイン後のリダイレクトURL
     }
   },
 
