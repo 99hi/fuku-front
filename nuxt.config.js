@@ -36,6 +36,7 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
+    '~/plugins/axios',
     '~/plugins/vue-croppa',
     '~/plugins/vue-draggable-resizable'
   ],
@@ -75,7 +76,7 @@ export default {
     '/api': {
       target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
       pathRewrite: {
-          '^/api': '',
+          '^/api': '/',
       },
     },
   },
@@ -117,12 +118,24 @@ export default {
   },
 
   auth: {
+    // redirect: {
+    //   login: '/login', 
+    //   logout: '/login',
+    //   callback: false,
+    //   home: '/'
+    // },
+    token: {
+      prefix: '_token.'
+    },
     strategies: {
       local: {
         endpoints: {
-          login: { url: '/api/auth/login', method: 'post', propertyName: 'token' },
-          logout: { url: '/api/auth/logout', method: 'post' },
-          user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
+          login: { url: '/api/user/token', method: 'get', propertyName: 'token' },
+          logout: false,
+          user: { url: '/api/user/', method: 'get', propertyName: false }
+          // login: { url: '/api/auth/login', method: 'post', propertyName: 'token' },
+          // logout: { url: '/api/auth/logout', method: 'post' },
+          // user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
         },
         // tokenRequired: true,
         // tokenType: 'bearer'

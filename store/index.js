@@ -26,4 +26,17 @@ export const mutations = {
   }
 }
 
-export const actions = {}
+export const actions = {
+  async nuxtServerInit({ commit }, { app }) {
+      await app.$axios
+          .get("/user")
+          .then(response => {
+              commit("login/setUser", response.user);
+              commit("login/setLoggedIn", true);
+          })
+          .catch(() => {
+              commit("login/setUser", null);
+              commit("login/setLoggedIn", false);
+          });
+  }
+};

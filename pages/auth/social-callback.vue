@@ -1,34 +1,52 @@
 <template>
   <div>
-    <p>少しお待ちください...</p>
-    <p>{{ token }}</p>
+    <p>googleアカウントでログイン中…</p>
   </div>
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
   data() {
-    return {
-      token: this.$route.query.token ? this.$route.query.token : null,
-    };
+    return {};
   },
   mounted() {
-    console.log("ログイン実行");
-    this.$auth
-      .loginWith("local", {
-        data: {
-          token: this.token,
-        },
-      })
-      .then((res) => {
-        console.log("成功");
-        console.log(res);
-      })
-      .catch((e) => {
-        console.log("エラー");
-        console.log(e);
-        //return this.$router.push('/error')
-      });
+    console.log("トークン", this.$route.query.token);
+    this.setToken(this.$route.query.token);
+    this.login();
+    this.getUser();
+  },
+  methods: {
+    ...mapMutations({
+      setUser: "login/setUser",
+      setLoggedIn: "login/setLoggedIn",
+      setToken: "login/setToken",
+    }),
+    getUser() {
+      this.$axios
+        .get("/api/user")
+        .then((res) => {
+          console.log("user", res);
+          this.setUser(res.data);
+          this.setLoggedIn(true);
+
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    login() {
+      this.$auth
+        .loginWith("local", { data: this.$route.query.token })
+        .then((res) => {
+          console.log("$authログイン", res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>

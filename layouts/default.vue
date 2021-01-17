@@ -24,6 +24,16 @@ export default {
     BottomNav,
     alert,
   },
+  middleware({ store, redirect, route }) {
+    // ユーザーが認証されていない場合
+    if (
+      !store.state.auth.loggedIn &&
+      route.path !== "/auth/social-callback" &&
+      route.path !== "/login"
+    ) {
+      redirect("/login");
+    }
+  },
   data() {
     return {};
   },
