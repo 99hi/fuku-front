@@ -12,6 +12,48 @@
 
     <v-row style="width: 100%" justify="center" class="title mx-auto">hiroki</v-row>
 
+    <v-row justify="center" class="my-3">
+      <v-card shaped elevation="2" class="closet">
+        <v-card-text>
+          <div>MY CLOSET</div>
+          <v-row class="flex-column season-box">
+            <v-col cols="12" class="season">all</v-col>
+            <v-col cols="12" class="season">春</v-col>
+            <v-col cols="12" class="season">夏</v-col>
+            <v-col cols="12" class="season">秋</v-col>
+            <v-col cols="12" class="season">冬</v-col>
+          </v-row>
+          <v-row class="text-right mr-4">
+            <v-col cols="6" elevation="0" class="category">
+              <p class="font-weight-black num ma-0">
+                12
+              </p>
+              <p>トップス</p>
+            </v-col>
+            <v-col cols="6" elevation="0" class="category">
+              <p class="font-weight-black num ma-0">
+                12
+              </p>
+              <p>アウター</p>
+            </v-col>
+            <v-col cols="6" elevation="0" class="category">
+              <p class="font-weight-black num ma-0">
+                12
+              </p>
+              <p>パンツ</p>
+            </v-col>
+            <v-col cols="6" elevation="0" class="category">
+              <p class="font-weight-black num ma-0">
+                12
+              </p>
+              <p>シューズ</p>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        
+      </v-card>
+    </v-row>
+
     <v-row no-gutters>
       <v-list class="item" width="100vw">
         <v-subheader>SHARE</v-subheader>
@@ -54,7 +96,7 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-container class="pa-1" fluid>
-                <v-list style="height: 50px; margin-bottom: 20px">
+                <v-list style="height: 50px; margin-bottom: 20px" v-if="users.length !== 0">
                   <v-list-item v-for="(user, key) in users" :key="key">
                     <v-list-item-content>
                       <div>{{ user.share_username }}</div>
@@ -107,6 +149,11 @@
         </v-expansion-panels>
         <v-divider></v-divider>
       </v-list>
+    </v-row>
+    <v-row>
+      <v-col cols="12" style="text-align: center" class="mt-2 mb-9">
+        <v-btn>ログアウト<v-icon>mdi-logout-variant</v-icon></v-btn>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -165,5 +212,27 @@ export default {
   height: 35px;
   font-size: 18px;
   line-height: 35px;
+}
+
+.closet {
+  width: 80%;
+  position: relative;
+}
+.closet .season-box {
+  position: absolute;
+}
+.closet .season {
+  padding: 1;
+}
+.closet .season-box
+.category {
+  position: relative;
+  width: 60px;
+  padding: 0;
+}
+.category num {
+  position: absolute;
+  left: 10;
+
 }
 </style>
