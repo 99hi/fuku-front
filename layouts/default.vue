@@ -25,21 +25,27 @@ export default {
     alert,
   },
   middleware({ store, redirect, route }) {
-    // ユーザーが認証されていない場合
+    //ユーザーが認証されていない場合;
+    console.log("loggedIn実行前", store.state.auth.loggedIn);
     if (
-      !store.state.auth.loggedIn &&
+      route.path !== "/auth/social-callback/" &&
       route.path !== "/auth/social-callback" &&
       route.path !== "/login"
     ) {
-      redirect("/login");
+      if (!store.state.auth.loggedIn) {
+        console.log("loggedIn実行後", store.state.auth.loggedIn);
+        console.log("middlewareリダイレクト");
+        redirect("/login");
+      }
     }
   },
   data() {
     return {};
   },
   mounted() {
-    console.log(process.env.NODE_ENV);
-    console.log(process.env.BASE_URL);
+    console.log("node_env", process.env.NODE_ENV);
+    console.log("base_url", process.env.BASE_URL);
+    console.log("path", this.$route.path);
   },
   created() {
     this.$store.dispatch("clothes/checkClothes");

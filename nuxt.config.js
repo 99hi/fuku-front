@@ -72,18 +72,19 @@ export default {
 
   
 
-  proxy: {
-    '/api': {
-      target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
-      pathRewrite: {
-          '^/api': '/',
-      },
-    },
-  },
+  // proxy: {
+  //   '/api': {
+  //     target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
+  //     pathRewrite: {
+  //         '^/api': '/',
+  //     },
+  //   },
+  // },
   axios: {
-    proxy: true,
-    prefix: '/api',
-    credentials: true,
+    baseURL: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
+    // proxy: true,
+    // prefix: '/api',
+    // credentials: true,
   },
 
 
@@ -132,7 +133,7 @@ export default {
         endpoints: {
           login: { url: '/api/user/token', method: 'get', propertyName: 'token' },
           logout: false,
-          user: { url: '/api/user/', method: 'get', propertyName: false }
+          user: { url: '/api/user', method: 'get', propertyName: false }
           // login: { url: '/api/auth/login', method: 'post', propertyName: 'token' },
           // logout: { url: '/api/auth/logout', method: 'post' },
           // user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }

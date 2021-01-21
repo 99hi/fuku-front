@@ -11,7 +11,8 @@ export default {
   data() {
     return {};
   },
-  mounted() {
+  created() {
+    console.log("path", this.$route.path);
     console.log("トークン", this.$route.query.token);
     this.setToken(this.$route.query.token);
     this.login();
@@ -23,19 +24,18 @@ export default {
       setLoggedIn: "login/setLoggedIn",
       setToken: "login/setToken",
     }),
-    getUser() {
-      this.$axios
+    async getUser() {
+      await this.$axios
         .get("/api/user")
         .then((res) => {
           console.log("user", res);
           this.setUser(res.data);
           this.setLoggedIn(true);
-
-          this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);
         });
+      this.$router.push("/");
     },
     login() {
       this.$auth

@@ -1,24 +1,25 @@
 <template>
   <v-container class="login">
     <v-row>
-    <v-col cols="12" ><v-img src="/icon.png" width="60vw" class="mx-auto"></v-img></v-col>
-    <v-col>
-      <h3>LOGIN</h3>
-    </v-col>
-    <v-col cols="12" class="col">
-      <v-btn @click="getUrl" justify="center" width="200px" outlined>
-      <v-icon class="pr-2 btn">mdi-google</v-icon>
-        GOOGLE
-      </v-btn>
-    </v-col>
-    <v-col cols="12" class="col">
-      <v-btn @click="getUrl" justify="center" width="200px" outlined>
-      <v-icon class="pr-2 btn">mdi-account-circle</v-icon>
-      GUEST
-      </v-btn>
-    </v-col>
+      <v-col cols="12"
+        ><v-img src="/icon.png" width="60vw" class="mx-auto"></v-img
+      ></v-col>
+      <v-col>
+        <h3>LOGIN</h3>
+      </v-col>
+      <v-col cols="12" class="col">
+        <v-btn @click="getUrl" justify="center" width="200px" outlined>
+          <v-icon class="pr-2 btn">mdi-google</v-icon>
+          GOOGLE
+        </v-btn>
+      </v-col>
+      <v-col cols="12" class="col">
+        <v-btn @click="getUrl" justify="center" width="200px" outlined>
+          <v-icon class="pr-2 btn">mdi-account-circle</v-icon>
+          GUEST
+        </v-btn>
+      </v-col>
     </v-row>
-    
   </v-container>
 </template>
 
@@ -27,7 +28,7 @@ export default {
   methods: {
     getUrl() {
       this.$axios.get("/api/auth/login/google").then((res) => {
-        console.log(res.data.redirect_url);
+        console.log("リダイレクトURL", res.data.redirect_url);
         window.location.href = res.data.redirect_url;
       });
     },
@@ -55,5 +56,4 @@ export default {
 .login .col {
   text-align: center;
 }
-
 </style>
