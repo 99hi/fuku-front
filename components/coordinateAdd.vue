@@ -240,16 +240,15 @@ export default {
       //画像のアップロード
       if (url) {
         console.log("cloudinary画像アップ");
-        await this.$axios
-          .post(
-            `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUDNAME}/upload`,
-            formData
-          )
+        await this.$cloudinary
+          .upload(url, {
+            upload_preset: process.env.CLOUDINARY_UPLOADPRESET,
+          })
           .then((res) => {
             console.log("Success!!");
-            console.log(res.data);
-            this.upUrl = res.data.secure_url;
-            this.cloudinary_id = res.data.public_id;
+            console.log(res);
+            this.upUrl = res.secure_url;
+            this.cloudinary_id = res.public_id;
             this.myCroppa.refresh();
 
             this.loading = false;
