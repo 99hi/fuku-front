@@ -5,37 +5,96 @@
     </v-toolbar>
 
     <div class="select-photo">
-      <croppa ref="croppa" v-model="myCroppa" canvas-color="transparent" placeholder="写真を選択してください" :quality="1" :width="300" :height="300" :accept="'image/*'" @file-type-mismatch="onFileTypeMismatch" @new-image-drawn="handleNewImage" @image-remove="handleImageRemove"></croppa>
+      <croppa
+        ref="croppa"
+        v-model="myCroppa"
+        canvas-color="transparent"
+        placeholder="写真を選択してください"
+        :quality="1"
+        :width="300"
+        :height="300"
+        :accept="'image/*'"
+        @file-type-mismatch="onFileTypeMismatch"
+        @new-image-drawn="handleNewImage"
+        @image-remove="handleImageRemove"
+      ></croppa>
 
       <br />
-      <img ref="resizeImg" class="output" :src="imgUrl" width="0" height="0" @load="upload($event.target.files)" />
+      <img
+        ref="resizeImg"
+        class="output"
+        :src="imgUrl"
+        width="0"
+        height="0"
+        @load="upload($event.target.files)"
+      />
     </div>
 
     <v-form class="add-form">
       <v-container>
         <v-row>
           <v-col cols="12">
-            <v-select v-model="selectedCategory" :items="category" label="カテゴリ" dense prepend required color></v-select>
+            <v-select
+              v-model="selectedCategory"
+              :items="category"
+              label="カテゴリ"
+              dense
+              prepend
+              required
+              color
+            ></v-select>
           </v-col>
 
           <v-col cols="12">
-            <v-select v-model="selectedColor" :items="colors" item-text="label" label="色" dense prepend required></v-select>
+            <v-select
+              v-model="selectedColor"
+              :items="colors"
+              item-text="label"
+              label="色"
+              dense
+              prepend
+              required
+            ></v-select>
           </v-col>
 
           <v-col cols="3">
-            <v-checkbox v-model="selectedSeason" label="春" color="#F06292" value="1" hide-details></v-checkbox>
+            <v-checkbox
+              v-model="selectedSeason"
+              label="春"
+              color="#F06292"
+              value="1"
+              hide-details
+            ></v-checkbox>
           </v-col>
 
           <v-col cols="3">
-            <v-checkbox v-model="selectedSeason" label="夏" color="#03A9F4" value="2" hide-details></v-checkbox>
+            <v-checkbox
+              v-model="selectedSeason"
+              label="夏"
+              color="#03A9F4"
+              value="2"
+              hide-details
+            ></v-checkbox>
           </v-col>
 
           <v-col cols="3">
-            <v-checkbox v-model="selectedSeason" label="秋" color="#795548" value="3" hide-details></v-checkbox>
+            <v-checkbox
+              v-model="selectedSeason"
+              label="秋"
+              color="#795548"
+              value="3"
+              hide-details
+            ></v-checkbox>
           </v-col>
 
           <v-col cols="3">
-            <v-checkbox v-model="selectedSeason" label="冬" color="#607D8B" value="4" hide-details></v-checkbox>
+            <v-checkbox
+              v-model="selectedSeason"
+              label="冬"
+              color="#607D8B"
+              value="4"
+              hide-details
+            ></v-checkbox>
           </v-col>
 
           <v-col cols="12">
@@ -44,13 +103,30 @@
           </v-combobox>
           -->
 
-            <v-autocomplete v-model="selectedTags" :items="tags" item-text="name" item-value="id" chips label="タグ付" :menu-props="{ top: true, offsetY: true }" multiple　clearable　deletable-chips></v-autocomplete>
+            <v-autocomplete
+              v-model="selectedTags"
+              :items="tags"
+              item-text="name"
+              item-value="id"
+              chips
+              label="タグ付"
+              :menu-props="{ top: true, offsetY: true }"
+              multiple　clearable　deletable-chips
+            ></v-autocomplete>
           </v-col>
         </v-row>
         <v-col cols="12" style="text-align: center">
-          <v-btn ripple outlined :loading="loading" :disabled="btnDisabled" color=" red darken-1" @click="generateImage(), (loading = true)">アップロード</v-btn>
+          <v-btn
+            ripple
+            outlined
+            :loading="loading"
+            :disabled="btnDisabled"
+            color=" red darken-1"
+            @click="generateImage(), (loading = true)"
+            >アップロード</v-btn
+          >
         </v-col>
-        <v-btn @click="test">test</v-btn>
+        <v-btn @click="generateImage(), (loading = true)">test</v-btn>
       </v-container>
     </v-form>
   </div>
@@ -149,7 +225,10 @@ export default {
     },
     onFileTypeMismatch(file) {
       console.log("ファイルが違う");
-      this.$store.commit("changeAlert", { type: "error", message: "jpg,png形式でアップして下さい" });
+      this.$store.commit("changeAlert", {
+        type: "error",
+        message: "jpg,png形式でアップして下さい",
+      });
     },
     generateImage() {
       let url = this.myCroppa.generateDataUrl();
@@ -161,47 +240,45 @@ export default {
     },
 
     upload() {
-      //画像の設定
-      const formData = new FormData();
-      formData.append("file", this.$refs.resizeImg.src);
-      formData.append("upload_preset", process.env.CLOUDINARY_UPLOADPRESET);
-
       //画像のアップロード
-      this.$axios.post(`https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUDNAME}/upload`, formData).then((res) => {
-        console.log("Success!!");
-        console.log(res.data);
-        this.$refs.resizeImg.src = "";
-        this.myCroppa.refresh();
-        this.btnDisabled = true;
-        this.$store.commit("changeAlert", { type: "success", message: "アップロードしました" });
-        this.loading = false;
-
-        //データベース追加
-        this.$axios
-          .post("/api/clothes/add", {
-            url: res.data.secure_url,
-            category: this.selectedCategory,
-            color: this.selectedColor ? this.selectedColor : null,
-            cloudinary_id: res.data.public_id,
-            seasons: this.selectedSeason ? this.selectedSeason : null,
-            tags: this.selectedTags ? this.selectedTags : null,
-          })
-          .then((res) => {
-            //設定のリセット
-            console.log(res.data);
-            this.selectedColor = "";
-            this.selectedSeason = [];
-            this.selectedTags = [];
-            this.$store.dispatch("clothes/checkClothes");
+      this.$cloudinary
+        .upload(this.$refs.resizeImg.src, {
+          upload_preset: process.env.CLOUDINARY_UPLOADPRESET,
+        })
+        .then((res) => {
+          console.log("Success!!");
+          console.log(res);
+          this.$refs.resizeImg.src = "";
+          this.myCroppa.refresh();
+          this.btnDisabled = true;
+          this.$store.commit("changeAlert", {
+            type: "success",
+            message: "アップロードしました",
           });
-      });
-    },
+          this.loading = false;
 
-    test() {
-      this.$axios.get("https://stylie-api.herokuapp.com/api/tag/all").then((res) => {
-        console.log("test");
-        console.log(res.data);
-      });
+          //データベース追加
+          this.$axios
+            .post("/api/clothes/add", {
+              url: res.secure_url,
+              category: this.selectedCategory,
+              color: this.selectedColor ? this.selectedColor : null,
+              cloudinary_id: res.public_id,
+              seasons: this.selectedSeason ? this.selectedSeason : null,
+              tags: this.selectedTags ? this.selectedTags : null,
+            })
+            .then((res) => {
+              //設定のリセット
+              console.log(res.data);
+              this.selectedColor = "";
+              this.selectedSeason = [];
+              this.selectedTags = [];
+              this.$store.dispatch("clothes/checkClothes");
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

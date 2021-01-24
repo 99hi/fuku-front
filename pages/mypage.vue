@@ -16,41 +16,40 @@
       <v-card shaped elevation="2" class="closet">
         <v-card-text>
           <div>MY CLOSET</div>
-          <v-row class="flex-column season-box">
-            <v-col cols="12" class="season">all</v-col>
-            <v-col cols="12" class="season">春</v-col>
-            <v-col cols="12" class="season">夏</v-col>
-            <v-col cols="12" class="season">秋</v-col>
-            <v-col cols="12" class="season">冬</v-col>
+          <v-row class="flex-column season">
+            <v-btn-toggle
+              v-model="season"
+              style="flex-direction: column"
+              dense
+              tile
+              color="primary"
+              multiple
+            >
+              <v-btn text color="#F06292">春</v-btn>
+              <v-btn text color="#03A9F4">夏</v-btn>
+              <v-btn text color="#795548">秋</v-btn>
+              <v-btn text color="#607D8B">冬</v-btn>
+            </v-btn-toggle>
           </v-row>
-          <v-row class="text-right mr-4">
-            <v-col cols="6" elevation="0" class="category">
-              <p class="font-weight-black num ma-0">
-                12
-              </p>
+          <v-row class="text-right mr-3" justify="end">
+            <v-col cols="5" elevation="0" class="category">
+              <p class="font-weight-black num ma-0 title">23</p>
               <p>トップス</p>
             </v-col>
-            <v-col cols="6" elevation="0" class="category">
-              <p class="font-weight-black num ma-0">
-                12
-              </p>
+            <v-col cols="5" elevation="0" class="category">
+              <p class="font-weight-black num ma-0 title">11</p>
               <p>アウター</p>
             </v-col>
-            <v-col cols="6" elevation="0" class="category">
-              <p class="font-weight-black num ma-0">
-                12
-              </p>
+            <v-col cols="5" elevation="0" class="category">
+              <p class="font-weight-black num ma-0 title">9</p>
               <p>パンツ</p>
             </v-col>
-            <v-col cols="6" elevation="0" class="category">
-              <p class="font-weight-black num ma-0">
-                12
-              </p>
+            <v-col cols="5" elevation="0" class="category">
+              <p class="font-weight-black num ma-0 title">5</p>
               <p>シューズ</p>
             </v-col>
           </v-row>
         </v-card-text>
-        
       </v-card>
     </v-row>
 
@@ -96,7 +95,10 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-container class="pa-1" fluid>
-                <v-list style="height: 50px; margin-bottom: 20px" v-if="users.length !== 0">
+                <v-list
+                  style="height: 50px; margin-bottom: 20px"
+                  v-if="users.length !== 0"
+                >
                   <v-list-item v-for="(user, key) in users" :key="key">
                     <v-list-item-content>
                       <div>{{ user.share_username }}</div>
@@ -174,6 +176,7 @@ export default {
       ],
       users: [],
       valid: false,
+      season: [],
     };
   },
   created() {
@@ -218,21 +221,22 @@ export default {
   width: 80%;
   position: relative;
 }
-.closet .season-box {
-  position: absolute;
-}
 .closet .season {
-  padding: 1;
+  position: absolute;
+  top: 60px;
+  left: 30px;
 }
-.closet .season-box
-.category {
+.closet .season .category {
   position: relative;
-  width: 60px;
+  width: 40px;
   padding: 0;
 }
 .category num {
   position: absolute;
   left: 10;
+}
 
+.v-application--is-ltr .v-btn-toggle > .v-btn.v-btn:not(:first-child) {
+  border-left-width: 1px !important;
 }
 </style>

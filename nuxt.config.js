@@ -5,8 +5,6 @@ const {
   CLOUDINARY_CLOUDNAME,
   CLOUDINARY_UPLOADPRESET,
   baseUrl
-  //BASE_URL,
-  //API_URL
 } = process.env;
 
 export default {
@@ -46,8 +44,6 @@ export default {
     CLOUDINARY_CLOUDNAME,
     CLOUDINARY_UPLOADPRESET,
     baseUrl
-    //BASE_URL,
-    //API_URL
   },
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -60,21 +56,18 @@ export default {
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
-    // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
-
     '@nuxtjs/auth',
-
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    '@nuxtjs/cloudinary'
   ],
 
   
 
   // proxy: {
   //   '/api': {
-  //     target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
+  //     target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/api" : "http://localhost:8000/api",
   //     pathRewrite: {
   //         '^/api': '/',
   //     },
@@ -142,6 +135,12 @@ export default {
         // tokenType: 'bearer'
       }
     }
+  },
+
+  cloudinary: {
+    cloudName: CLOUDINARY_CLOUDNAME,
+    apiKey: CLOUDINARY_API_KEY,
+    secure: false
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
