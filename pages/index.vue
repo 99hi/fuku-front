@@ -1,6 +1,7 @@
 <template>
   <v-card style="position: relative">
     <div class="closet-top-bar">
+      <weather></weather>
       <!-- ユーザーの切り替え -->
       <v-menu offset-y transition="slide-y-transition">
         <template v-slot:activator="{ on }">
@@ -124,11 +125,13 @@
 import closetSort from "~/components/closetSort.vue";
 import clothesAbout from "~/components/clothesAbout.vue";
 import coordinateAdd from "~/components/coordinateAdd";
+import weather from "~/components/weather";
 export default {
   components: {
     closetSort,
     clothesAbout,
     coordinateAdd,
+    weather,
   },
   data() {
     return {
