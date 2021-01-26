@@ -4,7 +4,8 @@ const {
   CLOUDINARY_API_KEY,
   CLOUDINARY_CLOUDNAME,
   CLOUDINARY_UPLOADPRESET,
-  baseUrl
+  baseUrl,
+  WEATHER_API_KEY
 } = process.env;
 
 export default {
@@ -43,7 +44,8 @@ export default {
     CLOUDINARY_API_KEY,
     CLOUDINARY_CLOUDNAME,
     CLOUDINARY_UPLOADPRESET,
-    baseUrl
+    baseUrl,
+    WEATHER_API_KEY
   },
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
