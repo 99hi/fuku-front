@@ -65,22 +65,23 @@ export default {
     '@nuxtjs/cloudinary'
   ],
 
-  
+ 
 
-  // proxy: {
-  //   '/api': {
-  //     target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/api" : "http://localhost:8000/api",
-  //     pathRewrite: {
-  //         '^/api': '/',
-  //     },
-  //   },
-  // },
-  axios: {
-    baseURL: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
-    // proxy: true,
-    // prefix: '/api',
-    // credentials: true,
+  proxy: {
+    '/api': {
+      target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/api" : "http://localhost:8000/api",
+      pathRewrite: {
+          '^/api': '/',
+      },
+    },
   },
+  axios: {
+    //baseURL: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
+    proxy: true,
+    prefix: '/',
+    credentials: true,
+  },
+  
 
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
