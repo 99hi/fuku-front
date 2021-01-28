@@ -2,40 +2,42 @@
   <v-card style="position: relative">
     <div class="closet-top-bar">
       <weather></weather>
-      <!-- ユーザーの切り替え -->
-      <v-menu offset-y transition="slide-y-transition">
-        <template v-slot:activator="{ on }">
-          <v-btn color="black" text dark v-on="on" dense width="100vw"
-            >{{ selectUser
-            }}<v-icon color="red darken-1">mdi-arrow-down-drop-circle-outline</v-icon>
-          </v-btn>
-        </template>
-
-        <v-list>
-          <v-list-item v-for="(user, index) in users" :key="index">
-            <v-list-item-title @click="(selectUser = user), changeCloset(index)">{{
-              user
-            }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <!-- カテゴリーごとのタブ表示 -->
-      <v-tabs color="red darken-1" centered　show-arrows v-model="tab">
-        <v-tab v-for="(category, key) in categoryList" :key="key">
-          {{ category }}
-        </v-tab>
-      </v-tabs>
+      <v-divider></v-divider>
       <!-- メニューボタン -->
+
       <div class="closet-menu">
         <div class="closet-menu-item">
           <v-btn text @click="coordinateFlag = !coordinateFlag" color="red darken-1"
             ><v-icon color="red darken-1">mdi-hanger</v-icon>コーデ追加</v-btn
           >
         </div>
+        <!-- ユーザーの切り替え -->
+        <v-menu offset-y transition="slide-y-transition" class="closet-menu-item">
+          <template v-slot:activator="{ on }">
+            <v-btn color="red darken-1" dark v-on="on" icon text large
+              ><v-icon>mdi-account-switch</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item v-for="(user, index) in users" :key="index">
+              <v-list-item-title @click="(selectUser = user), changeCloset(index)">{{
+                user
+              }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
         <div class="closet-menu-item">
           <closetSort @filter="applyFilter"></closetSort>
         </div>
       </div>
+
+      <!-- カテゴリーごとのタブ表示 -->
+      <v-tabs color="red darken-1" centered　show-arrows v-model="tab">
+        <v-tab v-for="(category, key) in categoryList" :key="key">
+          {{ category }}
+        </v-tab>
+      </v-tabs>
     </div>
     <clothesAbout ref="clothesAbout"></clothesAbout>
 
@@ -281,7 +283,7 @@ export default {
 }
 
 .closet-menu {
-  height: 40px;
+  height: 50px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -293,10 +295,11 @@ export default {
 }
 .closet-menu-item {
   cursor: pointer;
+  width: 30%;
 }
 
 .closet-tabs-items {
-  margin-top: 124px;
+  margin-top: 154px;
   min-height: 100vh;
 }
 
@@ -323,5 +326,9 @@ export default {
   position: fixed;
   bottom: 0;
   margin: 0;
+}
+
+.inversion {
+  color: blue;
 }
 </style>
