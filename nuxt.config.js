@@ -62,24 +62,25 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/auth',
     '@nuxtjs/proxy',
-    '@nuxtjs/cloudinary'
+    '@nuxtjs/cloudinary',
+    'nuxt-clipboard2'
   ],
 
  
 
-  proxy: {
-    '/api': {
-      target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/api" : "http://localhost:8000/api",
-      pathRewrite: {
-          '^/api': '/',
-      },
-    },
-  },
+  // proxy: {
+  //   '/api': {
+  //     target: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/api" : "http://localhost:8000/api",
+  //     pathRewrite: {
+  //         '^/api': '/',
+  //     },
+  //   },
+  // },
   axios: {
-    //baseURL: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
-    proxy: true,
-    prefix: '/',
-    credentials: true,
+    baseURL: process.env.NODE_ENV === "production" ? "https://stylie-api.herokuapp.com/" : "http://localhost:8000/",
+    // proxy: true,
+    // prefix: '/',
+    // credentials: true,
   },
   
 

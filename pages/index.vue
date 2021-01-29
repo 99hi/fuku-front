@@ -21,7 +21,7 @@
 
           <v-list>
             <v-list-item v-for="(user, index) in users" :key="index">
-              <v-list-item-title @click="(selectUser = user), changeCloset(index)">{{
+              <v-list-item-title @click="changeCloset(index)">{{
                 user
               }}</v-list-item-title>
             </v-list-item>
@@ -143,15 +143,19 @@ export default {
       position: [0, 0, 0, 0],
       dialog: false,
       coordinateFlag: false,
-      users: ["自分", "兄"],
-      selectUser: "自分",
+      users: ["自分"],
     };
   },
-
   mounted() {
+    this.$axios.get("/api/share/users").then((res) => {
+      res.data.map((user) => {
+        this.users.push(user.share_username);
+      });
+    });
     // イベントリスナの追加
     window.addEventListener("scroll", this.handleScroll);
   },
+
   destroyed() {
     // イベントリスナの削除
     window.removeEventListener("scroll", this.handleScroll);
@@ -300,7 +304,7 @@ export default {
 
 .closet-tabs-items {
   margin-top: 154px;
-  min-height: 100vh;
+  min-height: 80vh;
 }
 
 .v-overlay {
@@ -326,9 +330,5 @@ export default {
   position: fixed;
   bottom: 0;
   margin: 0;
-}
-
-.inversion {
-  color: blue;
 }
 </style>

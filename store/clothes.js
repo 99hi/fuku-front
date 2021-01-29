@@ -3,7 +3,8 @@ export const state = () => ({
   filteredClothes: [],
   selectedClothes: [],
   shareCloset: [],
-  shareUser: 0
+  shareUser: 0,
+  shareUserList: []
 })
 
 export const getters = {
@@ -30,6 +31,11 @@ export const getters = {
   getShareClothes(state) {
     return state.shareClothes
   },
+
+  getShareUserList(state) {
+    console.log("getShareUserList")
+    return state.shareUserList
+  }
 }
 
 export const mutations = {
@@ -73,6 +79,9 @@ export const mutations = {
     } else {
       state.filteredClothes = state.shareCloset[state.shareUser - 1]
     }
+  },
+  setShareUserList(state, userList) {
+    state.shareUserList = userList
   }
 }
 
@@ -88,5 +97,11 @@ export const actions = {
     const closet = await this.$axios.get('/api/share').then((res) => { return res.data })
     console.log(closet)
     commit('setShareCloset', closet)
+  },
+
+  async shareUserList({ commit, state }) {
+    const userList = await this.$axios.get('/api/share/users').then((res) => { return res.data})
+    console.log(userList)
+    commit('setShareUserList', userList)
   }
 }

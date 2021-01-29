@@ -24,21 +24,18 @@ export default {
     BottomNav,
     alert,
   },
-  // middleware({ store, redirect, route }) {
-  //   //ユーザーが認証されていない場合;
-  //   console.log("loggedIn実行前", store.state.auth.loggedIn);
-  //   if (
-  //     route.path !== "/auth/social-callback/" &&
-  //     route.path !== "/auth/social-callback" &&
-  //     route.path !== "/login"
-  //   ) {
-  //     if (!store.state.auth.loggedIn) {
-  //       console.log("loggedIn実行後", store.state.auth.loggedIn);
-  //       console.log("middlewareリダイレクト");
-  //       redirect("/login");
-  //     }
-  //   }
-  // },
+  name: "default",
+  middleware({ store, redirect, route }) {
+    //ユーザーが認証されていない場合;
+    console.log("loggedIn実行前", store.state.auth.loggedIn);
+    if (route.path !== "/auth/social-callback" && route.path !== "/login") {
+      if (!store.state.auth.loggedIn) {
+        console.log("loggedIn実行後", store.state.auth.loggedIn);
+        console.log("middlewareリダイレクト");
+        redirect("/login");
+      }
+    }
+  },
   data() {
     return {};
   },
@@ -49,9 +46,8 @@ export default {
   },
   created() {
     this.$store.dispatch("clothes/checkClothes");
-  },
-  mounted() {
     this.$store.dispatch("clothes/shareCloset");
+    this.$store.dispatch("clothes/shareUserList");
   },
 };
 </script>

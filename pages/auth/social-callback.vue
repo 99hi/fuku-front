@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <p>googleアカウントでログイン中…</p>
-  </div>
+  <v-container class="social" fluid fill-height style="height: 100vh; position: fixed">
+    <v-row align="center" justify="center">
+      <v-progress-circular indeterminate color="red"></v-progress-circular>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -31,11 +33,11 @@ export default {
           console.log("user", res);
           this.setUser(res.data);
           this.setLoggedIn(true);
+          this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);
         });
-      this.$router.push("/");
     },
     login() {
       this.$auth

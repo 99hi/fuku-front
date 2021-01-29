@@ -14,7 +14,7 @@
         </v-btn>
       </v-col>
       <v-col cols="12" class="col">
-        <v-btn @click="getUrl" justify="center" width="200px" outlined>
+        <v-btn @click="guestLogin" justify="center" width="200px" outlined>
           <v-icon class="pr-2 btn">mdi-account-circle</v-icon>
           GUEST
         </v-btn>
@@ -28,7 +28,12 @@ export default {
   methods: {
     getUrl() {
       this.$axios.get("/api/auth/login/google").then((res) => {
-        console.log("リダイレクトURL", res.data.redirect_url);
+        window.location.href = res.data.redirect_url;
+      });
+    },
+    guestLogin() {
+      console.log("ゲストログイン");
+      this.$axios.get("/api/auth/login/guest").then((res) => {
         window.location.href = res.data.redirect_url;
       });
     },
@@ -45,7 +50,7 @@ export default {
   width: 100vw;
 }
 .login {
-  position: relative;
+  position: fixed;
   z-index: 5;
   height: 100vh;
   display: flex;
