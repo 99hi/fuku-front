@@ -265,7 +265,7 @@ export default {
       }
     },
     copy() {
-      this.$copyText(this.user.share_code);
+      this.$copyText(this.$store.state.auth.user.share_code);
       this.$store.commit("changeAlert", {
         type: "success",
         message: "コードをコピーしました",
