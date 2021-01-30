@@ -116,12 +116,12 @@ export default {
   },
 
   auth: {
-    // redirect: {
-    //   login: '/login', 
-    //   logout: '/login',
-    //   callback: false,
-    //   home: '/'
-    // },
+    redirect: {
+      login: '/login', 
+      logout: '/login',
+      callback: false,
+      home: false
+    },
     token: {
       prefix: '_token.'
     },
@@ -131,12 +131,7 @@ export default {
           login: { url: '/api/user/token', method: 'get', propertyName: 'token' },
           logout: false,
           user: { url: '/api/user', method: 'get', propertyName: false }
-          // login: { url: '/api/auth/login', method: 'post', propertyName: 'token' },
-          // logout: { url: '/api/auth/logout', method: 'post' },
-          // user: { url: '/api/auth/user', method: 'get', propertyName: 'user' }
         },
-        // tokenRequired: true,
-        // tokenType: 'bearer'
       }
     }
   },

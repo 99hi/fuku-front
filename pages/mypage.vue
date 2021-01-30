@@ -11,7 +11,7 @@
     </v-row>
 
     <v-row style="width: 100%" justify="center" class="title mx-auto">{{
-      user.name
+      $store.state.auth.user.name
     }}</v-row>
 
     <v-row justify="center" class="my-3 mx-auto" style="width: 100vw">
@@ -64,7 +64,9 @@
             <v-list-item-content class="text-content">
               <v-list-item-title>コード</v-list-item-title>
               <v-spacer></v-spacer>
-              <v-list-item-subtitle>{{ user.share_code }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{
+                $store.state.auth.user.share_code
+              }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-col>
 
@@ -167,7 +169,7 @@
 
           <v-col cols="4" style="text-align: right">
             <v-list-item-action class="mx-0">
-              <v-switch v-model="show" inset></v-switch>
+              <v-switch v-model="weather" inset></v-switch>
             </v-list-item-action>
           </v-col>
         </v-list-item>
@@ -201,10 +203,6 @@
 export default {
   data() {
     return {
-      user: {
-        name: "",
-        share_code: "",
-      },
       addUser: {
         name: "",
         share_code: "",
@@ -220,19 +218,10 @@ export default {
       users: [],
       valid: false,
       season: [],
-      show: true,
+      weather: true,
     };
   },
-  created() {
-    this.me();
-  },
   methods: {
-    me() {
-      this.$axios.get("/api/user").then((res) => {
-        this.user.name = res.data.name;
-        this.user.share_code = res.data.share_code;
-      });
-    },
     add() {
       this.$axios
         .post("/api/share/add", this.addUser)
@@ -264,6 +253,10 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.$store.dispatch("clothes/shareUserList");
+          this.$store.commit("changeAlert", {
+            type: res.data.type,
+            message: res.data.message,
+          });
         });
     },
     validate() {

@@ -14,11 +14,8 @@ export default {
     return {};
   },
   created() {
-    console.log("path", this.$route.path);
-    console.log("トークン", this.$route.query.token);
     this.setToken(this.$route.query.token);
     this.login();
-    this.getUser();
   },
   methods: {
     ...mapMutations({
@@ -26,24 +23,12 @@ export default {
       setLoggedIn: "login/setLoggedIn",
       setToken: "login/setToken",
     }),
-    async getUser() {
-      await this.$axios
-        .get("/api/user")
-        .then((res) => {
-          console.log("user", res);
-          this.setUser(res.data);
-          this.setLoggedIn(true);
-          this.$router.push("/");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
     login() {
       this.$auth
         .loginWith("local", { data: this.$route.query.token })
         .then((res) => {
           console.log("$authログイン", res);
+          this.$router.push("/");
         })
         .catch((error) => {
           console.log(error);
