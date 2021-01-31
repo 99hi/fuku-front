@@ -46,6 +46,7 @@ export default {
   },
   created() {
     this.$store.dispatch("clothes/checkClothes");
+    this.$store.dispatch("getArea");
     this.$store.dispatch("clothes/shareCloset");
     this.$store.dispatch("clothes/shareUserList");
   },

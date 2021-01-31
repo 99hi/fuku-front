@@ -1,0 +1,25 @@
+[
+        {
+          "title": "東京都",
+          "cities": [
+            { "city": "新宿", "romaji": "shinjuku" },
+            { "city": "八王子", "romaji": "hachioji" }
+          ]
+        },
+        {
+          "title": "山口県",
+          "cities": [
+            { "city": "宇部", "romaji": "ube" },
+            { "city": "山口", "romaji": "yamaguchi" },
+            { "city": "防府", "romaji": "hofu" },
+            { "city": "下関", "romaji": "shimonoseki" }
+          ]
+        },
+        {
+          "title": "福岡県",
+          "cities": [
+            { "city": "北九州", "romaji": "kitakyushu" },
+            { "city": "福岡", "romaji": "fukuoka" }
+          ]
+        }
+      ]

@@ -115,7 +115,7 @@
             ></v-autocomplete>
           </v-col>
         </v-row>
-        <v-col cols="12" style="text-align: center">
+        <v-col cols="12" style="text-align: center" class="mb-5">
           <v-btn
             ripple
             outlined
@@ -126,7 +126,6 @@
             >アップロード</v-btn
           >
         </v-col>
-        <v-btn @click="generateImage(), (loading = true)">test</v-btn>
       </v-container>
     </v-form>
   </div>

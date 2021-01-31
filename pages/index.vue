@@ -42,7 +42,11 @@
     <clothesAbout ref="clothesAbout"></clothesAbout>
 
     <!-- 服 -->
-    <v-tabs-items v-model="tab" class="px-2 closet-tabs-items">
+    <v-tabs-items
+      v-model="tab"
+      class="px-2 closet-tabs-items"
+      :class="[$store.state.weatherFlag == 1 ? 'true-weather' : 'false-weather']"
+    >
       <v-tab-item v-for="(category, key) in categoryList" :key="key" class="">
         <v-container fluid>
           <v-row style="width: 100vw">
@@ -303,8 +307,13 @@ export default {
 }
 
 .closet-tabs-items {
-  margin-top: 154px;
   min-height: 80vh;
+}
+.true-weather {
+  margin-top: 154px;
+}
+.false-weather {
+  margin-top: 99px;
 }
 
 .v-overlay {

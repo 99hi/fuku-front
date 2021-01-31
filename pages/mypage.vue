@@ -6,7 +6,7 @@
 
     <v-row justify="center" class="ma-5">
       <v-avatar height="100px" width="100px">
-        <img src="https://picsum.photos/100/100/?random" alt="John" />
+        <img :src="$store.state.auth.user.picture" />
       </v-avatar>
     </v-row>
 
@@ -169,7 +169,7 @@
 
           <v-col cols="4" style="text-align: right">
             <v-list-item-action class="mx-0">
-              <v-switch v-model="weather" inset></v-switch>
+              <v-switch v-model="showWeather" inset></v-switch>
             </v-list-item-action>
           </v-col>
         </v-list-item>
@@ -183,7 +183,18 @@
 
           <v-col cols="4" style="text-align: right">
             <v-list-item-action class="mx-0">
-              <v-btn color="#2C4B70" depressed rounded outlined>宇部</v-btn>
+              <v-btn @click="area = true" color="#2C4B70" depressed rounded outlined>{{
+                $store.state.weatherArea.city
+              }}</v-btn>
+
+              <v-dialog
+                v-model="area"
+                fullscreen
+                hide-overlay
+                transition="slide-x-transition"
+              >
+                <weatherArea @clickBack="close"></weatherArea>
+              </v-dialog>
             </v-list-item-action>
           </v-col>
         </v-list-item>
@@ -200,7 +211,11 @@
 </template>
 
 <script>
+import weatherArea from "~/components/weatherArea.vue";
 export default {
+  components: {
+    weatherArea,
+  },
   data() {
     return {
       addUser: {
@@ -219,6 +234,7 @@ export default {
       valid: false,
       season: [],
       weather: true,
+      area: false,
     };
   },
   methods: {
@@ -271,8 +287,28 @@ export default {
         message: "コードをコピーしました",
       });
     },
+    close() {
+      this.area = false;
+    },
     logout() {
       this.$auth.logout();
+    },
+  },
+  computed: {
+    showWeather: {
+      get() {
+        return this.$store.state.weatherFlag;
+      },
+      set(value) {
+        console.log(value);
+        this.$axios
+          .post("/api/weather/display", {
+            display: value,
+          })
+          .then((res) => {
+            this.$store.commit("setWeatherFlag", res.data);
+          });
+      },
     },
   },
 };
