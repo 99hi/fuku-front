@@ -27,28 +27,42 @@
               color="primary"
               multiple
             >
-              <v-btn text color="#F06292">春</v-btn>
-              <v-btn text color="#03A9F4">夏</v-btn>
-              <v-btn text color="#795548">秋</v-btn>
-              <v-btn text color="#607D8B">冬</v-btn>
+              <v-btn text color="#F06292" value="春">春</v-btn>
+              <v-btn text color="#03A9F4" value="夏">夏</v-btn>
+              <v-btn text color="#795548" value="秋">秋</v-btn>
+              <v-btn text color="#607D8B" value="冬">冬</v-btn>
             </v-btn-toggle>
           </v-row>
-          <v-row class="text-right mr-1" justify="end">
-            <v-col cols="5" elevation="0" class="category">
-              <p class="font-weight-black num ma-0 title">23</p>
-              <p>トップス</p>
+          <v-row
+            class="text-right mr-1"
+            justify="end"
+            v-if="$store.state.clothes.clothesList.length"
+          >
+            <v-col
+              v-for="(item, key) in count"
+              :key="key"
+              cols="5"
+              elevation="0"
+              class="category"
+            >
+              <p class="font-weight-black num ma-0 title">
+                {{ item.num }}
+              </p>
+              <p>{{ item.name }}</p>
             </v-col>
-            <v-col cols="5" elevation="0" class="category">
-              <p class="font-weight-black num ma-0 title">11</p>
-              <p>アウター</p>
-            </v-col>
-            <v-col cols="5" elevation="0" class="category">
-              <p class="font-weight-black num ma-0 title">9</p>
-              <p>パンツ</p>
-            </v-col>
-            <v-col cols="5" elevation="0" class="category">
-              <p class="font-weight-black num ma-0 title">5</p>
-              <p>シューズ</p>
+          </v-row>
+          <v-row class="text-right mr-1" justify="end" v-else>
+            <v-col
+              v-for="(item, key) in 4"
+              :key="key"
+              cols="5"
+              elevation="0"
+              class="category"
+            >
+              <p class="font-weight-black num ma-0 title">
+                {{ item.num ? item.num : "???" }}
+              </p>
+              <p>{{ item.name ? item.name : "???" }}</p>
             </v-col>
           </v-row>
         </v-card-text>
@@ -201,10 +215,9 @@
         <v-divider></v-divider>
       </v-list>
     </v-row>
-
     <v-row style="width: 100vw">
       <v-col cols="12" style="text-align: center" class="mt-2 mb-9">
-        <v-btn @click="logout">ログアウト<v-icon>mdi-logout-variant</v-icon></v-btn>
+        <v-btn @click="logout" color="red darken-1" dark>ログアウト</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -233,7 +246,6 @@ export default {
       users: [],
       valid: false,
       season: [],
-      weather: true,
       area: false,
     };
   },
@@ -309,6 +321,37 @@ export default {
             this.$store.commit("setWeatherFlag", res.data);
           });
       },
+    },
+    count() {
+      let categories = ["トップス", "アウター", "パンツ", "シューズ"];
+      let count = [];
+      if (this.season.length === 0) {
+        categories.forEach((cate, index) => {
+          count.push({
+            name: cate,
+            num: this.$store.state.clothes.clothesList[index].length,
+          });
+        });
+        return count;
+      } else {
+        let resultData = [];
+        categories.forEach((cate, index) => {
+          const data = this.$store.state.clothes.clothesList[index].filter(
+            (value, index) => {
+              const seasonList = value.seasons.map((season) => season.name);
+              if (seasonList.some((season) => this.season.includes(season))) return value;
+            }
+          );
+          resultData.push(data);
+        });
+        categories.forEach((cate, index) => {
+          count.push({
+            name: cate,
+            num: resultData[index].length,
+          });
+        });
+        return count;
+      }
     },
   },
 };

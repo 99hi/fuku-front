@@ -98,21 +98,22 @@
           </v-col>
 
           <v-col cols="12">
-            <!--
-          <v-combobox clearable multiple :items="tags" item-text="name" item-value="id" v-model="selectedTags" label="タグ付け" append-icon chips deletable-chips :search-input.sync="search" @keyup.tab="updateTags" @paste="updateTags">
-          </v-combobox>
-          -->
-
-            <v-autocomplete
-              v-model="selectedTags"
+            <v-combobox
+              clearable
+              multiple
               :items="tags"
               item-text="name"
               item-value="id"
+              v-model="selectedTags"
+              label="タグ付け"
+              append-icon
               chips
-              label="タグ付"
-              :menu-props="{ top: true, offsetY: true }"
-              multiple　clearable　deletable-chips
-            ></v-autocomplete>
+              deletable-chips
+              :search-input.sync="search"
+              @keyup.tab="updateTags"
+              @paste="updateTags"
+            >
+            </v-combobox>
           </v-col>
         </v-row>
         <v-col cols="12" style="text-align: center" class="mb-5">
@@ -193,6 +194,7 @@ export default {
       selectedSeason: [],
       selectedTags: [],
       tags: [],
+      search: null,
       loading: false,
       btnDisabled: true,
     };
@@ -202,11 +204,11 @@ export default {
   },
   methods: {
     getTags() {
-      this.$axios.get("/api/tag/all").then((res) => {
+      this.$axios.get("/api/tag/clothes").then((res) => {
         this.tags = res.data;
       });
     },
-    /* タグ入力用
+    // タグ入力用
     updateTags() {
       this.$nextTick(() => {
         this.select.push(...this.search.split(","));
@@ -215,7 +217,6 @@ export default {
         });
       });
     },
-    */
     handleNewImage(file) {
       this.btnDisabled = false;
     },

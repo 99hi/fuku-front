@@ -34,7 +34,10 @@
 
       <!-- カテゴリーごとのタブ表示 -->
       <v-tabs color="red darken-1" centered　show-arrows v-model="tab">
-        <v-tab v-for="(category, key) in categoryList" :key="key">
+        <v-tab
+          v-for="(category, key) in $store.getters['clothes/getCategory']"
+          :key="key"
+        >
           {{ category }}
         </v-tab>
       </v-tabs>
@@ -47,7 +50,11 @@
       class="px-2 closet-tabs-items"
       :class="[$store.state.weatherFlag == 1 ? 'true-weather' : 'false-weather']"
     >
-      <v-tab-item v-for="(category, key) in categoryList" :key="key" class="">
+      <v-tab-item
+        v-for="(category, key) in $store.getters['clothes/getCategory']"
+        :key="key"
+        class=""
+      >
         <v-container fluid>
           <v-row style="width: 100vw">
             <v-col
@@ -139,10 +146,13 @@ export default {
     coordinateAdd,
     weather,
   },
+  asyncData({ store }) {
+    store.dispatch("clothes/category");
+    store.dispatch("clothes/checkClothes");
+  },
   data() {
     return {
       tab: 0,
-      categoryList: ["トップス", "アウター", "パンツ", "シューズ"],
       active: "トップス",
       position: [0, 0, 0, 0],
       dialog: false,
@@ -150,6 +160,7 @@ export default {
       users: ["自分"],
     };
   },
+
   mounted() {
     this.$axios.get("/api/share/users").then((res) => {
       res.data.map((user) => {
@@ -210,7 +221,7 @@ export default {
     //タグ検索
     tagSearch(targetData, selectedTag) {
       let resultData = [];
-      this.categoryList.forEach((value, index) => {
+      this.$store.getters["clothes/getCategory"].forEach((value, index) => {
         const data = targetData[index].filter((value, index) => {
           const tagList = value.tags.map((tag) => tag.name);
           if (tagList.some((tag) => selectedTag.includes(tag))) return value;
@@ -222,7 +233,7 @@ export default {
     //色フィルター
     colorFilter(targetData, selectedcolor) {
       let resultData = [];
-      this.categoryList.forEach((value, index) => {
+      this.$store.getters["clothes/getCategory"].forEach((value, index) => {
         let data = targetData[index].filter((value, index) => {
           if (value.color === selectedcolor) return value;
         });
@@ -233,7 +244,7 @@ export default {
     //シーズンフィルター
     seasonFilter(targetData, selectedSeason) {
       let resultData = [];
-      this.categoryList.forEach((value, index) => {
+      this.$store.getters["clothes/getCategory"].forEach((value, index) => {
         const data = targetData[index].filter((value, index) => {
           const seasonList = value.seasons.map((season) => season.name);
           if (seasonList.some((season) => selectedSeason.includes(season))) return value;
@@ -261,7 +272,6 @@ export default {
         return this.$store.getters["clothes/getSelectedClothes"];
       },
       set(value) {
-        console.log(value);
         this.$store.commit("clothes/setSelectedClothes", value);
       },
     },

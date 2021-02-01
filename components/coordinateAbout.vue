@@ -91,6 +91,42 @@
               </v-container>
             </v-expansion-panel-content>
           </v-expansion-panel>
+
+          <v-expansion-panel>
+            <v-expansion-panel-header>
+              <template v-slot:default="{ open }">
+                <v-row no-gutters>
+                  <v-col cols="4">タグ</v-col>
+                  <v-col cols="8" class="text--secondary">
+                    <v-fade-transition leave-absolute>
+                      <span v-if="open" key="0"> タグを選択 </span>
+                      <span v-else key="1">{{ selectedTag.toString() }}</span>
+                    </v-fade-transition>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-container class="px-0" fluid>
+                <v-combobox
+                  clearable
+                  multiple
+                  :items="tags"
+                  item-text="name"
+                  item-value="id"
+                  v-model="selectedTag"
+                  label="タグ付け"
+                  append-icon
+                  chips
+                  deletable-chips
+                  :search-input.sync="search"
+                  @keyup.tab="updateTags"
+                  @paste="updateTags"
+                >
+                </v-combobox>
+              </v-container>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
         </v-expansion-panels>
 
         <v-sheet class="mx-auto my-1" max-width="800">
@@ -108,7 +144,7 @@
         </v-sheet>
 
         <v-row justify="center" class="pa-2 mx-0" style="width: 100vw">
-          <v-btn color="red darken-1" dark>保存</v-btn>
+          <v-btn color="red darken-1" dark @click="update">更新</v-btn>
         </v-row>
       </v-card>
     </v-dialog>
@@ -123,6 +159,9 @@ export default {
       coordinate: Object,
       selectedSeason: [],
       model: null,
+      selectedTag: [],
+      tags: [],
+      search: null,
     };
   },
   methods: {
@@ -132,12 +171,43 @@ export default {
       this.dialog = true;
       this.coordinate = Object.assign({}, coordinate);
       this.selectedSeason = coordinate.seasons.map((season) => season.name);
+      this.selectedTag = coordinate.tags.map((tag) => tag.name);
+    },
+    getTags() {
+      this.$axios.get("/api/tag/coordinations").then((res) => {
+        this.tags = res.data;
+      });
+    },
+    updateTags() {
+      this.$nextTick(() => {
+        this.select.push(...this.search.split(","));
+        this.$nextTick(() => {
+          this.search = "";
+        });
+      });
+    },
+    update() {
+      this.coordinate.tags = this.selectedTag;
+      this.coordinate.seasons = this.selectedSeason;
+      this.$store.commit("changeAlert", {
+        type: "success",
+        message: "更新しました",
+      });
+      this.$axios
+        .put("/api/coordination/update/" + this.coordinate.id, { data: this.coordinate })
+        .then((res) => {
+          console.log(res.data);
+        });
     },
   },
   mounted() {
-    console.log("コーディネートアバウト表示");
+    this.getTags();
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.vdr {
+  border: none;
+}
+</style>

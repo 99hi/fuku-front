@@ -129,11 +129,30 @@
                 hide-details
               ></v-checkbox>
             </v-col>
+
+            <v-col cols="12">
+              <v-combobox
+                clearable
+                multiple
+                :items="tags"
+                item-text="name"
+                item-value="id"
+                v-model="selectedTags"
+                label="タグ付け"
+                append-icon
+                chips
+                deletable-chips
+                :search-input.sync="search"
+                @keyup.tab="updateTags"
+                @paste="updateTags"
+              >
+              </v-combobox>
+            </v-col>
           </v-row>
 
           <v-row justify="center">
             <v-btn
-              class="mt-4"
+              class="mb-4"
               @click="upload(), (loading = true)"
               :loading="loading"
               :disabled="btnDisabled === true && toggle === 1"
@@ -165,7 +184,13 @@ export default {
       upUrl: String,
       cloudinary_id: String,
       active: null,
+      selectedTags: [],
+      tags: [],
+      search: null,
     };
+  },
+  mounted() {
+    this.getTags();
   },
   methods: {
     test(clothes) {
@@ -262,6 +287,7 @@ export default {
           cloudinary_id: this.cloudinary_id ? this.cloudinary_id : null,
           clothesList: this.clothesList,
           seasons: this.selectedSeason ? this.selectedSeason : null,
+          tags: this.selectedTags ? this.selectedTags : null,
         })
         .then((res) => {
           //設定のリセット
@@ -278,6 +304,20 @@ export default {
         .catch((e) => {
           console.log("エラー" + e);
         });
+    },
+    getTags() {
+      this.$axios.get("/api/tag/coordinations").then((res) => {
+        this.tags = res.data;
+      });
+    },
+    // タグ入力用
+    updateTags() {
+      this.$nextTick(() => {
+        this.select.push(...this.search.split(","));
+        this.$nextTick(() => {
+          this.search = "";
+        });
+      });
     },
   },
   computed: {

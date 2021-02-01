@@ -1,4 +1,4 @@
-﻿﻿<template>
+<template>
   <div class="closet-sort">
     <v-btn text @click.stop="drawer = !drawer" color="red darken-1"
       ><v-icon color="red darken-1">mdi-tune-variant</v-icon>絞り込み</v-btn
@@ -35,7 +35,7 @@
               </v-row>
             </template>
           </v-expansion-panel-header>
-          <v-expansion-panel-content style="height: 400px">
+          <v-expansion-panel-content>
             <v-container class="px-0" fluid>
               <v-autocomplete
                 v-model="filterQuery.tags"
@@ -46,34 +46,6 @@
                 :menu-props="{ top: false, offsetY: true }"
                 multiple　clearable　deletable-chips
               ></v-autocomplete>
-            </v-container>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-
-        <v-expansion-panel>
-          <v-expansion-panel-header>
-            <template v-slot:default="{ open }">
-              <v-row no-gutters>
-                <v-col cols="4">色</v-col>
-                <v-col cols="8" class="text--secondary">
-                  <v-fade-transition leave-absolute>
-                    <span v-if="open" key="0"> 色を選択 </span>
-                    <span v-else key="1">{{ filterQuery.color.label }}</span>
-                  </v-fade-transition>
-                </v-col>
-              </v-row>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-container class="px-0" fluid>
-              <v-radio-group v-model="filterQuery.color">
-                <v-radio
-                  v-for="(color, key) in colors"
-                  :key="key"
-                  :label="color.label"
-                  :value="color"
-                ></v-radio>
-              </v-radio-group>
             </v-container>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -150,7 +122,6 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-
       <template v-slot:append>
         <div style="display: flex; justify-content: space-around" class="mb-5">
           <v-btn width="40%" color="grey lighten-1" @click="reset">リセット</v-btn>
@@ -247,7 +218,7 @@ export default {
       };
     },
     getTags() {
-      this.$axios.get("/api/tag/clothes").then((res) => {
+      this.$axios.get("/api/tag/coordinations").then((res) => {
         this.tags = res.data;
       });
     },
@@ -258,8 +229,8 @@ export default {
   watch: {
     filterQuery: {
       handler(val, oldVal) {
-        console.log(val);
-        this.$emit("filter", val.color.value, val.season, val.dateSort, val.tags);
+        console.log("filterQuery", val);
+        this.$emit("filter", val.season, val.dateSort, val.tags);
       },
       deep: true,
     },

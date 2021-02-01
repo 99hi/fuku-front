@@ -4,18 +4,16 @@ export const state = () => ({
   selectedClothes: [],
   shareCloset: [],
   shareUser: 0,
-  shareUserList: []
+  shareUserList: [],
+  category: [],
+  countCloset: {}
 })
 
 export const getters = {
   getClothesList(state) {
     if (state.shareUser === 0) {
-      console.log("自分のクローゼットを返す")
-      console.log(state.clothesList)
       return state.clothesList
     } else {
-      console.log("シェアのクローゼットを返す")
-      console.log(state.shareCloset[state.shareUser - 1])
       return state.shareCloset[state.shareUser - 1]
     }
   },
@@ -33,8 +31,11 @@ export const getters = {
   },
 
   getShareUserList(state) {
-    console.log("getShareUserList")
     return state.shareUserList
+  },
+
+  getCategory(state) {
+    return state.category.map((cate) => cate.name)
   }
 }
 
@@ -46,10 +47,8 @@ export const mutations = {
 
   setFilteredClothes(state, payload) {
     state.filteredClothes = payload.slice()
-    console.log("setFilteredClothes実行")
   },
   resetFilteredClothes(state) {
-    console.log("リセット")
     if (state.shareUser === 0) {
       state.filteredClothes = state.clothesList
     } else {
@@ -61,10 +60,8 @@ export const mutations = {
   //コーディネート追加
   setSelectedClothes(state, payload) {
     state.selectedClothes = payload
-    console.log("setSelectedClotehs実行")
   },
   deleteSelectedClothes(state, payload) {
-    console.log("deleteSelectedClothes実行")
     state.selectedClothes = state.selectedClothes.filter((clothes) => clothes.id !== payload.id)
   },
 
@@ -82,26 +79,33 @@ export const mutations = {
   },
   setShareUserList(state, userList) {
     state.shareUserList = userList
+  },
+  //カテゴリー
+  setCategory(state, category) {
+    state.category = category
   }
 }
 
 export const actions = {
   async checkClothes({ commit, state }) {
     const clothes = await this.$axios.get('/api/clothes/get').then((res) => { return res.data })
-    console.log(clothes)
     commit('setClothes', clothes)
     commit('setFilteredClothes', clothes)
   },
 
   async shareCloset({ commit, state }) {
     const closet = await this.$axios.get('/api/share').then((res) => { return res.data })
-    console.log(closet)
     commit('setShareCloset', closet)
   },
 
   async shareUserList({ commit, state }) {
     const userList = await this.$axios.get('/api/share/users').then((res) => { return res.data})
-    console.log(userList)
     commit('setShareUserList', userList)
-  }
-}
+  },
+
+  async category({ commit }) {
+    const category = await this.$axios.get('/api/category').then((res) => { return res.data })
+    commit('setCategory', category)
+  },
+
+ }
