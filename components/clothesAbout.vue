@@ -1,5 +1,23 @@
 <template>
   <v-row justify="center">
+    <v-dialog v-model="confirm" max-width="250px">
+      <v-card justify="center">
+        <v-card-title class="headline"></v-card-title>
+        <v-row style="width: 100%">
+          <v-col md="12" align="center">
+            <div style="margin-left: 15px">
+              <v-icon class="mr-2" large>mdi-chat-alert</v-icon>本当に削除しますか？
+            </div>
+          </v-col>
+        </v-row>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="deleteClothes">はい</v-btn>
+          <v-btn color="green darken-1" text @click="confirm = false">いいえ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-dialog
       v-model="dialog"
       fullscreen
@@ -13,7 +31,9 @@
           </v-btn>
           <v-toolbar-title>服の詳細</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon><v-icon large>mdi-delete-forever</v-icon></v-btn>
+          <v-btn icon @click="confirm = true"
+            ><v-icon large>mdi-delete-forever</v-icon></v-btn
+          >
         </v-toolbar>
         <v-list three-line subheader>
           <v-list-item>
@@ -171,7 +191,7 @@
               v-for="coordinate in coordinations.coordinations"
               :key="coordinate.id"
             >
-              <v-card class="ma-4" height="100" width="60">
+              <v-card class="ma-4" height="100" width="60" v-if="coordinate.url">
                 <v-row class="fill-height" align="center" justify="center">
                   <v-scale-transition>
                     <v-img :src="coordinate.url" contain></v-img>
@@ -195,6 +215,7 @@ export default {
   data() {
     return {
       dialog: false,
+      confirm: false,
       clothes: Object,
       selectedSeason: [],
       selectedTag: [],
@@ -297,8 +318,24 @@ export default {
           this.$store.dispatch("clothes/checkClothes");
         });
     },
-    delete() {
+    deleteClothes() {
       console.log("削除");
+      this.$axios
+        .delete("/api/clothes/delete/" + this.clothes.id)
+        .then((res) => {
+          console.log("res", res);
+          this.$store.dispatch("clothes/checkClothes");
+          this.$store.dispatch("coordinate/coordinate");
+          this.confirm = false;
+          this.dialog = false;
+          this.$store.commit("changeAlert", {
+            type: "success",
+            message: "削除しました",
+          });
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
     },
     test() {},
   },

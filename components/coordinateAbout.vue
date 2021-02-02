@@ -1,5 +1,23 @@
 <template>
   <v-row justify="center">
+    <v-dialog v-model="confirm" max-width="250px">
+      <v-card justify="center">
+        <v-card-title class="headline"></v-card-title>
+        <v-row style="width: 100%">
+          <v-col md="12" align="center">
+            <div style="margin-left: 15px">
+              <v-icon class="mr-2" large>mdi-chat-alert</v-icon>本当に削除しますか？
+            </div>
+          </v-col>
+        </v-row>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="deleteCoordinate">はい</v-btn>
+          <v-btn color="green darken-1" text @click="confirm = false">いいえ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-dialog
       v-model="dialog"
       fullscreen
@@ -13,7 +31,9 @@
           </v-btn>
           <v-toolbar-title>コーディネートの詳細</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon><v-icon large>mdi-delete-forever</v-icon></v-btn>
+          <v-btn icon @click="confirm = true"
+            ><v-icon large>mdi-delete-forever</v-icon></v-btn
+          >
         </v-toolbar>
         <v-list three-line subheader>
           <v-list-item>
@@ -156,6 +176,7 @@ export default {
   data() {
     return {
       dialog: false,
+      confirm: false,
       coordinate: Object,
       selectedSeason: [],
       model: null,
@@ -197,6 +218,25 @@ export default {
         .put("/api/coordination/update/" + this.coordinate.id, { data: this.coordinate })
         .then((res) => {
           console.log(res.data);
+        });
+    },
+    deleteCoordinate() {
+      console.log("削除");
+      this.$axios
+        .delete("/api/coordination/delete/" + this.coordinate.id)
+        .then((res) => {
+          console.log("res", res);
+          this.$store.dispatch("clothes/checkClothes");
+          this.$store.dispatch("coordinate/coordinate");
+          this.confirm = false;
+          this.dialog = false;
+          this.$store.commit("changeAlert", {
+            type: "success",
+            message: "削除しました",
+          });
+        })
+        .catch((error) => {
+          console.log("error", error);
         });
     },
   },

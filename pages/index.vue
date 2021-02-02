@@ -317,7 +317,7 @@ export default {
 }
 
 .closet-tabs-items {
-  min-height: 80vh;
+  min-height: 100vh;
 }
 .true-weather {
   margin-top: 154px;

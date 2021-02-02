@@ -12,46 +12,51 @@
     </div>
 
     <coordinateAbout ref="coordinateAbout"></coordinateAbout>
-    <v-container fill-height>
-      <div
-        class="stage"
-        v-for="coordinate in $store.getters['coordinate/filteredCoordinate']"
-        :key="coordinate.id"
-      >
-        <div
-          v-if="coordinate.url === null"
-          @click="openAbout(coordinate)"
-          style="widht: 100%; height: 100%"
-        >
-          <vue-draggable-resizable
-            v-for="clothes in coordinate.clothes"
-            :key="clothes.id"
-            :parent="true"
-            :x="clothes.x / 1.6"
-            :y="clothes.y / 2"
-            :w="clothes.width / 2"
-            :h="clothes.height / 2"
-            class="coordinate-item"
-            :style="clothes.fillStyle"
-            :lock-aspect-ratio="true"
-            :resizable="false"
-            :draggable="false"
+    <div style="height: 100vh">
+      <v-container>
+        <v-row class="main mx-auto">
+          <div
+            class="stage"
+            v-for="coordinate in $store.getters['coordinate/filteredCoordinate']"
+            :key="coordinate.id"
           >
-            <v-img :src="clothes.url"></v-img>
-          </vue-draggable-resizable>
-        </div>
+            <div
+              v-if="coordinate.url === null"
+              @click="openAbout(coordinate)"
+              style="widht: 100%; height: 100%"
+            >
+              <vue-draggable-resizable
+                v-for="clothes in coordinate.clothes"
+                :key="clothes.id"
+                :parent="true"
+                :x="clothes.x / 1.6"
+                :y="clothes.y / 2"
+                :w="clothes.width / 2"
+                :h="clothes.height / 2"
+                class="coordinate-item"
+                :style="clothes.fillStyle"
+                :lock-aspect-ratio="true"
+                :resizable="false"
+                :draggable="false"
+              >
+                <v-img :src="clothes.url" class="mx-auto"></v-img>
+              </vue-draggable-resizable>
+            </div>
 
-        <div v-else>
-          <v-img
-            contain
-            :src="coordinate.url"
-            :width="180"
-            :height="200"
-            @click="openAbout(coordinate)"
-          ></v-img>
-        </div>
-      </div>
-    </v-container>
+            <div v-else>
+              <v-img
+                contain
+                :src="coordinate.url"
+                :width="180"
+                :height="200"
+                @click="openAbout(coordinate)"
+                class="mx-auto"
+              ></v-img>
+            </div>
+          </div>
+        </v-row>
+      </v-container>
+    </div>
   </v-card>
 </template>
 
@@ -136,7 +141,8 @@ export default {
 .vdr {
   border: none;
 }
-.container {
+.main {
+  width: 100vw;
   margin-top: 98px;
 }
 .closet-top-bar {
@@ -161,5 +167,9 @@ export default {
 .closet-menu-item {
   cursor: pointer;
   width: 30%;
+}
+
+.v-responsive__sizer {
+  padding: 0 !important;
 }
 </style>
