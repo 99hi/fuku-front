@@ -146,10 +146,9 @@ export default {
     coordinateAdd,
     weather,
   },
-  asyncData({ store }) {
-    store.dispatch("clothes/category");
-    store.dispatch("clothes/checkClothes");
-  },
+  // asyncData({ store }) {
+  //   store.dispatch("clothes/checkClothes");
+  // },
   data() {
     return {
       tab: 0,

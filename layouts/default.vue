@@ -46,6 +46,7 @@ export default {
   },
   created() {
     this.$store.dispatch("clothes/checkClothes");
+    this.$store.dispatch("clothes/category");
     this.$store.dispatch("getArea");
     this.$store.dispatch("clothes/shareCloset");
     this.$store.dispatch("clothes/shareUserList");
@@ -60,5 +61,9 @@ export default {
 
 .v-card {
   border-radius: 0;
+}
+
+.vdr {
+  border: none !important;
 }
 </style>

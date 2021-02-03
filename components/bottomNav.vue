@@ -4,7 +4,6 @@
     height="70px"
     fixed
     flat
-    grow
     class="elevation-0 bottom-nav"
   >
     <v-btn to="/" class="pb-6">
@@ -45,5 +44,10 @@ export default {
   border-top: 1px solid gainsboro;
   z-index: 0 !important;
   width: 100vw;
+}
+
+.bottom-nav .v-btn {
+  min-width: 19vw !important;
+  padding: 0 0 24px !important;
 }
 </style>
