@@ -1,8 +1,39 @@
 <template>
-  <div style="width: 100vw">
+  <div style="width: 100vw" class="calendar">
     <v-toolbar flat height="48px" class="page-title">
       <v-toolbar-title>カレンダー</v-toolbar-title>
     </v-toolbar>
+
+    <!-- coordinate dialog -->
+    <v-dialog v-model="coodinateDialog" max-width="600px" style="height: 80vh">
+      <v-card v-if="showCoordinate" height="100%">
+        <v-card-title>
+          <span class="headline">{{ showCoordinate.name }} </span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row justify="center" align="center">
+              <v-col cols="12" v-if="showCoordinate.coordination" style="height: 100%">
+                <v-img :src="showCoordinate.coordination.url"></v-img>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="red darken-1" text @click="eventDelete"> 削除 </v-btn>
+          <v-btn
+            text
+            @click="
+              coodinateDialog = false;
+              showCoordinate = null;
+            "
+          >
+            閉じる
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <!-- dialog -->
     <v-dialog v-model="dialog" max-width="600px">
@@ -11,16 +42,27 @@
           <span class="headline">コーデ登録</span>
         </v-card-title>
         <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" sm="6" md="4">
+          <v-flex>
+            <v-row justify="center" align="center"
+              ><v-col cols="7" align-self="center">
                 <v-text-field
-                  label="title*"
+                  label="タイトル (必須)"
                   required
-                  v-model="register.title"
+                  v-model="register.name"
                 ></v-text-field>
               </v-col>
-
+              <v-col cols="5" align-self="center" class="color"
+                ><v-select
+                  v-model="register.color"
+                  :items="colors"
+                  item-text="label"
+                  label="色"
+                  dense
+                  prepend
+                  required
+                ></v-select></v-col
+            ></v-row>
+            <v-row class="select-coordinate">
               <v-col
                 cols="6"
                 sm="6"
@@ -58,19 +100,19 @@
                 </div>
               </v-col>
             </v-row>
-          </v-container>
+          </v-flex>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false"> キャンセル </v-btn>
           <v-btn
-            color="blue darken-1"
+            color="green darken-1"
             text
             @click="submit"
-            :disabled="!register.selected || register.title.length == 0"
+            :disabled="!register.selected || register.name.length == 0"
           >
             登録
           </v-btn>
+          <v-btn text @click="dialog = false"> 閉じる </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -103,9 +145,8 @@
       <v-calendar
         v-model="focus"
         ref="calendar"
-        :events="events"
+        :events="$store.getters['calendar/getEvents']"
         :event-color="getEventColor"
-        @change="getEvents"
         @click:event="showEvent"
         @click:date="viewDay"
       ></v-calendar>
@@ -118,33 +159,66 @@ export default {
   data() {
     return {
       focus: "",
-      events: [],
       dialog: false,
+      coodinateDialog: false,
+      showCoordinate: null,
       register: {
-        title: "",
-        date: "",
+        name: "コーデ",
+        start: "",
         selected: null,
+        color: "blue",
       },
+      colors: [
+        {
+          label: "グレイ系",
+          value: "grey",
+        },
+        {
+          label: "ブラウン系",
+          value: "brown",
+        },
+        {
+          label: "ベージュ系",
+          value: "beige",
+        },
+        {
+          label: "グリーン系",
+          value: "green",
+        },
+        {
+          label: "ブルー系",
+          value: "blue",
+        },
+        {
+          label: "パープル系",
+          value: "purple",
+        },
+        {
+          label: "イエロー系",
+          value: "yellow",
+        },
+        {
+          label: "ピンク系",
+          value: "pink",
+        },
+        {
+          label: "レッド系",
+          value: "red",
+        },
+        {
+          label: "オレンジ系",
+          value: "orange",
+        },
+      ],
     };
   },
   asyncData({ store }) {
-    store.dispatch("coordinate/coordinate");
+    store.dispatch("calendar/calendar");
   },
-  mounted() {
-    this.$refs.calendar.checkChange();
+  created() {
+    this.$store.dispatch("coordinate/coordinate");
   },
   methods: {
-    getEvents() {
-      const events = [
-        {
-          name: "発表",
-          start: new Date("2021-02-05"), // 開始時刻
-          color: "blue",
-          timed: false, // 終日ならfalse
-        },
-      ];
-      this.events = events;
-    },
     getEventColor(event) {
       return event.color;
     },
@@ -152,10 +226,12 @@ export default {
       this.focus = "";
     },
     showEvent({ event }) {
-      alert(`clicked ${event.name}`);
+      console.log(event);
+      this.showCoordinate = event;
+      this.coodinateDialog = true;
     },
     viewDay({ date }) {
-      this.register.date = date;
+      this.register.start = date;
       this.dialog = true;
     },
     prev() {
@@ -177,6 +253,39 @@ export default {
       this.dialog = false;
       console.log("登録");
       console.log(this.register);
+      this.$axios.post("/api/calendar", this.register).then((res) => {
+        console.log("res", res.data);
+        this.$store.dispatch("calendar/calendar");
+        this.$store.commit("changeAlert", {
+          type: "success",
+          message: "登録しました",
+        });
+        this.register = {
+          name: "コーデ",
+          start: "",
+          selected: null,
+          color: "blue",
+        };
+      });
+    },
+    eventDelete() {
+      console.log(this.showCoordinate.id);
+      this.$axios
+        .delete("/api/calendar", {
+          params: {
+            id: this.showCoordinate.id,
+          },
+        })
+        .then((res) => {
+          console.log("delete", res.data);
+          this.$store.dispatch("calendar/calendar");
+          this.$store.commit("changeAlert", {
+            type: "success",
+            message: "削除しました",
+          });
+          this.coodinateDialog = false;
+          this.showCoordinate = null;
+        });
     },
   },
 };
@@ -191,5 +300,16 @@ export default {
 
 .isActive {
   border: 4px solid blue;
+}
+
+.select-coordinate {
+  height: 50vh;
+  overflow: auto;
+}
+</style>
+
+<style>
+.color .v-text-field__details {
+  display: none !important;
 }
 </style>
