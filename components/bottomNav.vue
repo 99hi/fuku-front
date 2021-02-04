@@ -26,9 +26,9 @@
       <v-icon>mdi-calendar</v-icon>
     </v-btn>
 
-    <v-btn to="/mypage" class="pb-6">
-      <span class="text-caption">mypage</span>
-      <v-icon>mdi-account-outline</v-icon>
+    <v-btn to="/setting" class="pb-6">
+      <span class="text-caption">setting</span>
+      <v-icon>mdi-cog</v-icon>
     </v-btn>
   </v-bottom-navigation>
 </template>

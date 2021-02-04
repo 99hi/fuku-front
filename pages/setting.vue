@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-toolbar flat height="48px" class="page-title">
-      <v-toolbar-title>マイページ</v-toolbar-title>
+      <v-toolbar-title>設定</v-toolbar-title>
     </v-toolbar>
 
     <v-row justify="center" class="ma-5">
@@ -84,11 +84,11 @@
             </v-list-item-content>
           </v-col>
 
-          <v-col cols="4">
+          <v-col cols="4" class="text-right">
             <v-list-item-action style="display: inline" class="ma-0">
-              <v-btn fab dark small depressed color="green">
+              <!-- <v-btn fab dark small depressed color="green">
                 <v-icon>mdi-refresh</v-icon>
-              </v-btn>
+              </v-btn> -->
               <v-btn @click="copy" fab dark small depressed color="primary" class="mx-2">
                 <v-icon>mdi-content-copy</v-icon>
               </v-btn>
