@@ -86,9 +86,9 @@
 
           <v-col cols="4" class="text-right">
             <v-list-item-action style="display: inline" class="ma-0">
-              <!-- <v-btn fab dark small depressed color="green">
+              <v-btn fab dark small depressed color="green" @click="codeChange">
                 <v-icon>mdi-refresh</v-icon>
-              </v-btn> -->
+              </v-btn>
               <v-btn @click="copy" fab dark small depressed color="primary" class="mx-2">
                 <v-icon>mdi-content-copy</v-icon>
               </v-btn>
@@ -297,6 +297,15 @@ export default {
       this.$store.commit("changeAlert", {
         type: "success",
         message: "コードをコピーしました",
+      });
+    },
+    codeChange() {
+      this.$axios.put("/api/user/code").then((res) => {
+        this.$auth.fetchUser();
+        this.$store.commit("changeAlert", {
+          type: "success",
+          message: "コードを変更しました",
+        });
       });
     },
     close() {
