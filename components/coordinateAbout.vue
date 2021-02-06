@@ -38,26 +38,13 @@
         <v-list three-line subheader>
           <v-list-item>
             <v-list-item-content>
-              <div style="height: 460px; margin: 0 auto">
-                <v-img v-if="coordinate.url" :src="coordinate.url"></v-img>
-                <div v-else>
-                  <vue-draggable-resizable
-                    v-for="clothes in coordinate.clothes"
-                    :key="clothes.id"
-                    :parent="true"
-                    :x="clothes.x"
-                    :y="clothes.y"
-                    :w="clothes.width"
-                    :h="clothes.height"
-                    class="coordinate-item"
-                    :style="clothes.fillStyle"
-                    :lock-aspect-ratio="true"
-                    :resizable="false"
-                    :draggable="false"
-                  >
-                    <v-img :src="clothes.url"></v-img>
-                  </vue-draggable-resizable>
-                </div>
+              <div>
+                <v-img
+                  :src="coordinate.url"
+                  width="300"
+                  height="400"
+                  class="mx-auto"
+                ></v-img>
               </div>
             </v-list-item-content>
           </v-list-item>
@@ -187,8 +174,6 @@ export default {
   },
   methods: {
     showAbout(coordinate) {
-      console.log("test");
-      console.log(coordinate);
       this.dialog = true;
       this.coordinate = Object.assign({}, coordinate);
       this.selectedSeason = coordinate.seasons.map((season) => season.name);
@@ -210,14 +195,15 @@ export default {
     update() {
       this.coordinate.tags = this.selectedTag;
       this.coordinate.seasons = this.selectedSeason;
-      this.$store.commit("changeAlert", {
-        type: "success",
-        message: "更新しました",
-      });
+
       this.$axios
         .put("/api/coordination/update/" + this.coordinate.id, { data: this.coordinate })
         .then((res) => {
           console.log(res.data);
+          this.$store.commit("changeAlert", {
+            type: "success",
+            message: "更新しました",
+          });
         });
     },
     deleteCoordinate() {

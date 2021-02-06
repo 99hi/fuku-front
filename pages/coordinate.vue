@@ -20,30 +20,7 @@
             v-for="coordinate in $store.getters['coordinate/filteredCoordinate']"
             :key="coordinate.id"
           >
-            <div
-              v-if="coordinate.url === null"
-              @click="openAbout(coordinate)"
-              style="widht: 100%; height: 100%"
-            >
-              <vue-draggable-resizable
-                v-for="clothes in coordinate.clothes"
-                :key="clothes.id"
-                :parent="true"
-                :x="clothes.x / 1.6"
-                :y="clothes.y / 2"
-                :w="clothes.width / 2"
-                :h="clothes.height / 2"
-                class="coordinate-item"
-                :style="clothes.fillStyle"
-                :lock-aspect-ratio="true"
-                :resizable="false"
-                :draggable="false"
-              >
-                <v-img :src="clothes.url" class="mx-auto"></v-img>
-              </vue-draggable-resizable>
-            </div>
-
-            <div v-else>
+            <div>
               <v-img
                 contain
                 :src="coordinate.url"

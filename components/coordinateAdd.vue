@@ -28,7 +28,7 @@
           </v-row>
 
           <v-row justify="center" v-show="toggle === 0">
-            <div class="stage">
+            <div class="stage" ref="parts">
               <vue-draggable-resizable
                 v-for="(clothes, index) in selectedCoordinate"
                 :key="clothes.id"
@@ -54,12 +54,13 @@
 
                 <div>
                   <v-btn
+                    data-html2canvas-ignore="true"
                     fab
                     small
                     dark
                     color="red darken-1"
                     class="control-close handle-tl handle"
-                    @click="test(clothes)"
+                    @click="remove(clothes)"
                     ><v-icon small>mdi-close-thick</v-icon></v-btn
                   >
                 </div>
@@ -154,7 +155,6 @@
             <v-btn
               class="mb-4"
               @click="upload(), (loading = true)"
-              :loading="loading"
               :disabled="btnDisabled === true && toggle === 1"
               >コーデ追加</v-btn
             >
@@ -166,6 +166,7 @@
 </template>
 
 <script>
+import html2canvas from "html2canvas";
 export default {
   props: {
     data: null,
@@ -183,7 +184,6 @@ export default {
       selectedSeason: [],
       upUrl: String,
       cloudinary_id: String,
-      active: null,
       selectedTags: [],
       tags: [],
       search: null,
@@ -193,7 +193,7 @@ export default {
     this.getTags();
   },
   methods: {
-    test(clothes) {
+    remove(clothes) {
       console.log("削除クリック");
       this.$store.commit("clothes/deleteSelectedClothes", clothes);
     },
@@ -256,29 +256,35 @@ export default {
       });
     },
     async upload() {
-      console.log("アップロード");
-      let url = this.myCroppa.generateDataUrl();
-      console.log(url);
-      const formData = new FormData();
-      formData.append("file", url);
-      formData.append("upload_preset", process.env.CLOUDINARY_UPLOADPRESET);
-      //画像のアップロード
-      if (url) {
-        console.log("cloudinary画像アップ");
-        await this.$cloudinary
-          .upload(url, {
-            upload_preset: process.env.CLOUDINARY_UPLOADPRESET,
-          })
-          .then((res) => {
-            console.log("Success!!");
-            console.log(res);
-            this.upUrl = res.secure_url;
-            this.cloudinary_id = res.public_id;
-            this.myCroppa.refresh();
+      let url;
 
-            this.loading = false;
-          });
+      //パーツ又は画像のURL取得
+      if (this.toggle === 0) {
+        await html2canvas(this.$refs.parts, {
+          useCORS: true,
+          width: 300,
+          height: 400,
+        }).then(function (canvas) {
+          url = canvas.toDataURL();
+        });
+      } else if (this.toggle === 1) {
+        url = this.myCroppa.generateDataUrl();
       }
+
+      // cloudinary アップロード
+      await this.$cloudinary
+        .upload(url, {
+          upload_preset: process.env.CLOUDINARY_UPLOADPRESET,
+        })
+        .then((res) => {
+          console.log("Success!!");
+          console.log(res);
+          this.upUrl = res.secure_url;
+          this.cloudinary_id = res.public_id;
+          this.myCroppa.refresh();
+
+          this.loading = false;
+        });
       //データベース追加
       console.log("データベース追加");
       this.$axios
@@ -367,4 +373,9 @@ ul {
   margin-left: -5px;
   margin-top: -20px;
 }
+/* 
+.html2canvas-container {
+  width: 300px !important;
+  height: 400px !important;
+} */
 </style>
