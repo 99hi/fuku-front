@@ -151,11 +151,34 @@
             </v-col>
           </v-row>
 
-          <v-row justify="center">
+          <v-row justify="center" v-if="toggle === 0">
             <v-btn
+              ripple
+              outlined
+              color=" red darken-1"
+              :loading="loading"
               class="mb-4"
-              @click="upload(), (loading = true)"
-              :disabled="btnDisabled === true && toggle === 1"
+              @click="
+                loading = true;
+                upload();
+              "
+              :disabled="selectedCoordinate.length === 0"
+              >コーデ追加</v-btn
+            >
+          </v-row>
+
+          <v-row justify="center" v-else>
+            <v-btn
+              ripple
+              outlined
+              color=" red darken-1"
+              :loading="loading"
+              class="mb-4"
+              @click="
+                loading = true;
+                upload();
+              "
+              :disabled="btnDisabled === true && selectedCoordinate.length === 0"
               >コーデ追加</v-btn
             >
           </v-row>
@@ -256,8 +279,15 @@ export default {
       });
     },
     async upload() {
+      if (this.clothesList.length === 0) {
+        this.$store.commit("changeAlert", {
+          type: "warning",
+          message: "服が選択されていません",
+        });
+        this.loading = false;
+        return;
+      }
       let url;
-
       //パーツ又は画像のURL取得
       if (this.toggle === 0) {
         await html2canvas(this.$refs.parts, {
@@ -291,7 +321,7 @@ export default {
         .post("/api/coordination/add", {
           url: this.upUrl ? this.upUrl : null,
           cloudinary_id: this.cloudinary_id ? this.cloudinary_id : null,
-          clothesList: this.clothesList,
+          clothesList: this.selectedCoordinate,
           seasons: this.selectedSeason ? this.selectedSeason : null,
           tags: this.selectedTags ? this.selectedTags : null,
         })

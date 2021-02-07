@@ -7,33 +7,18 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-
 export default {
-  data() {
-    return {};
-  },
-  created() {
-    this.setToken(this.$route.query.token);
-    this.login();
-  },
-  methods: {
-    ...mapMutations({
-      setUser: "login/setUser",
-      setLoggedIn: "login/setLoggedIn",
-      setToken: "login/setToken",
-    }),
-    login() {
-      this.$auth
-        .loginWith("local", { data: this.$route.query.token })
-        .then((res) => {
-          console.log("$authログイン", res);
-          this.$router.push("/");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+  asyncData({ $auth, route, store, redirect }) {
+    store.commit("login/setToken", route.query.token);
+    $auth
+      .loginWith("local", { data: route.query.token })
+      .then((res) => {
+        console.log("$authログイン", res);
+        redirect("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 </script>

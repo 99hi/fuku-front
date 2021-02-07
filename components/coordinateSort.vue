@@ -124,8 +124,8 @@
       </v-expansion-panels>
       <template v-slot:append>
         <div style="display: flex; justify-content: space-around" class="mb-5">
-          <v-btn width="40%" color="grey lighten-1" @click="reset">リセット</v-btn>
-          <v-btn width="40%" color="red darken-1" dark @click="drawer = false"
+          <v-btn width="40%" ripple outlined @click="reset">リセット</v-btn>
+          <v-btn width="40%" ripple outlined color="red darken-1" @click="drawer = false"
             >完了</v-btn
           >
         </div>

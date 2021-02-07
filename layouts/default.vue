@@ -28,6 +28,7 @@ export default {
   middleware({ store, redirect, route }) {
     //ユーザーが認証されていない場合;
     console.log("loggedIn実行前", store.state.auth.loggedIn);
+    console.log("パス", route.path);
     if (route.path !== "/auth/social-callback" && route.path !== "/login") {
       if (!store.state.auth.loggedIn) {
         console.log("loggedIn実行後", store.state.auth.loggedIn);

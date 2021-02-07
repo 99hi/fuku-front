@@ -8,13 +8,31 @@
         <h3>LOGIN</h3>
       </v-col>
       <v-col cols="12" class="col">
-        <v-btn @click="getUrl" justify="center" width="200px" outlined>
+        <v-btn
+          @click="
+            getUrl();
+            google_loading = true;
+          "
+          justify="center"
+          width="200px"
+          outlined
+          :loading="google_loading"
+        >
           <v-icon class="pr-2 btn">mdi-google</v-icon>
           GOOGLE
         </v-btn>
       </v-col>
       <v-col cols="12" class="col">
-        <v-btn @click="guestLogin" justify="center" width="200px" outlined>
+        <v-btn
+          @click="
+            guestLogin();
+            guest_loading = true;
+          "
+          justify="center"
+          width="200px"
+          outlined
+          :loading="guest_loading"
+        >
           <v-icon class="pr-2 btn">mdi-account-circle</v-icon>
           GUEST
         </v-btn>
@@ -25,6 +43,12 @@
 
 <script>
 export default {
+  data() {
+    return {
+      google_loading: false,
+      guest_loading: false,
+    };
+  },
   methods: {
     getUrl() {
       this.$axios.get("/api/auth/login/google").then((res) => {

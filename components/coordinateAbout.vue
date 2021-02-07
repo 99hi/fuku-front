@@ -12,8 +12,19 @@
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="deleteCoordinate">はい</v-btn>
-          <v-btn color="green darken-1" text @click="confirm = false">いいえ</v-btn>
+          <v-btn
+            outlined
+            ripple
+            color="blue darken-1"
+            text
+            :loading="loading"
+            @click="
+              loading = true;
+              deleteCoordinate();
+            "
+            >はい</v-btn
+          >
+          <v-btn outlined ripple text @click="confirm = false">いいえ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -150,8 +161,8 @@
           </v-slide-group>
         </v-sheet>
 
-        <v-row justify="center" class="pa-2 mx-0" style="width: 100vw">
-          <v-btn color="red darken-1" dark @click="update">更新</v-btn>
+        <v-row justify="center" class="pa-2 mt-4 mx-auto" style="width: 100vw">
+          <v-btn color="red darken-1" ripple outlined @click="update">更新</v-btn>
         </v-row>
       </v-card>
     </v-dialog>
@@ -164,6 +175,7 @@ export default {
     return {
       dialog: false,
       confirm: false,
+      loading: false,
       coordinate: Object,
       selectedSeason: [],
       model: null,
@@ -199,7 +211,6 @@ export default {
       this.$axios
         .put("/api/coordination/update/" + this.coordinate.id, { data: this.coordinate })
         .then((res) => {
-          console.log(res.data);
           this.$store.commit("changeAlert", {
             type: "success",
             message: "更新しました",
@@ -211,18 +222,22 @@ export default {
       this.$axios
         .delete("/api/coordination/delete/" + this.coordinate.id)
         .then((res) => {
-          console.log("res", res);
           this.$store.dispatch("clothes/checkClothes");
           this.$store.dispatch("coordinate/coordinate");
           this.confirm = false;
           this.dialog = false;
+          this.loading = false;
           this.$store.commit("changeAlert", {
             type: "success",
             message: "削除しました",
           });
         })
         .catch((error) => {
-          console.log("error", error);
+          this.confirm = false;
+          this.$store.commit("changeAlert", {
+            type: "error",
+            message: error.message,
+          });
         });
     },
   },

@@ -4,6 +4,26 @@
       <v-toolbar-title>設定</v-toolbar-title>
     </v-toolbar>
 
+    <v-dialog v-model="confirm" max-width="250px">
+      <v-card justify="center">
+        <v-card-title class="headline"></v-card-title>
+        <v-row style="width: 100%">
+          <v-col md="12" align="center">
+            <div style="margin-left: 15px">
+              <v-icon class="mr-2" large>mdi-chat-alert</v-icon>本当に削除しますか？
+            </div>
+          </v-col>
+        </v-row>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn outlined ripple text color="blue darken-1" @click="deleteShareCloset"
+            >はい</v-btn
+          >
+          <v-btn outlined ripple text @click="confirm = false">いいえ</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-row justify="center" class="ma-5">
       <v-avatar height="100px" width="100px">
         <img :src="$store.state.auth.user.picture" />
@@ -122,7 +142,13 @@
                       <div>{{ user.share_username }}</div>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-btn icon @click="deleteShareCloset(user)">
+                      <v-btn
+                        icon
+                        @click="
+                          confirm = true;
+                          selectedUser = user;
+                        "
+                      >
                         <v-icon color="red darken-1"> mdi-delete-forever </v-icon>
                       </v-btn>
                     </v-list-item-action>
@@ -217,7 +243,7 @@
     </v-row>
     <v-row style="width: 100vw">
       <v-col cols="12" style="text-align: center" class="mt-2 mb-9">
-        <v-btn @click="logout" color="red darken-1" dark>ログアウト</v-btn>
+        <v-btn @click="logout" ripple outlined color=" red darken-1">ログアウト</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -244,9 +270,12 @@ export default {
         (v) => v.length == 10 || "コードは10文字です",
       ],
       users: [],
+      selectedUser: null,
       valid: false,
       season: [],
       area: false,
+      dialog: false,
+      confirm: false,
     };
   },
   methods: {
@@ -270,21 +299,23 @@ export default {
           console.log("エラー", error);
         });
     },
-    deleteShareCloset(user) {
-      console.log("delete", user.id);
+    deleteShareCloset() {
+      console.log("delete", this.selectedUser.id);
       this.$axios
         .delete("/api/share/delete", {
           params: {
-            id: user.id,
+            id: this.selectedUser.id,
           },
         })
         .then((res) => {
           console.log(res.data);
+          this.confirm = false;
           this.$store.dispatch("clothes/shareUserList");
           this.$store.commit("changeAlert", {
             type: res.data.type,
             message: res.data.message,
           });
+          this.selectedUser = null;
         });
     },
     validate() {

@@ -12,8 +12,19 @@
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="deleteClothes">はい</v-btn>
-          <v-btn color="green darken-1" text @click="confirm = false">いいえ</v-btn>
+          <v-btn
+            outlined
+            ripple
+            text
+            color="blue darken-1"
+            :loading="loading"
+            @click="
+              loading = true;
+              deleteClothes();
+            "
+            >はい</v-btn
+          >
+          <v-btn outlined ripple text @click="confirm = false">いいえ</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -202,8 +213,8 @@
           </v-slide-group>
         </v-sheet>
 
-        <v-row justify="center" class="mx-4 pb-4">
-          <v-btn width="40%" color="red darken-1" dark @click="update">更新</v-btn>
+        <v-row justify="center" class="mt-4 pa-2" style="width: 100vw">
+          <v-btn ripple outlined color="red darken-1" @click="update">更新</v-btn>
         </v-row>
       </v-card>
     </v-dialog>
@@ -216,6 +227,7 @@ export default {
     return {
       dialog: false,
       confirm: false,
+      loading: false,
       clothes: Object,
       selectedSeason: [],
       selectedTag: [],
@@ -328,6 +340,7 @@ export default {
           this.$store.dispatch("coordinate/coordinate");
           this.confirm = false;
           this.dialog = false;
+          this.loading = false;
           this.$store.commit("changeAlert", {
             type: "success",
             message: "削除しました",
