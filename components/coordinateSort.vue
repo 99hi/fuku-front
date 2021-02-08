@@ -39,7 +39,7 @@
             <v-container class="px-0" fluid>
               <v-autocomplete
                 v-model="filterQuery.tags"
-                :items="tags"
+                :items="$store.getters['tag/getCoordinateTag']"
                 item-text="name"
                 chips
                 label="タグを選択してください"
@@ -203,7 +203,6 @@ export default {
       },
       selectedDate: "新しい",
       selectedFab: "すべて表示",
-      tags: [],
     };
   },
   methods: {
@@ -217,14 +216,6 @@ export default {
         dateSort: "false",
       };
     },
-    getTags() {
-      this.$axios.get("/api/tag/coordinations").then((res) => {
-        this.tags = res.data;
-      });
-    },
-  },
-  mounted() {
-    this.getTags();
   },
   watch: {
     filterQuery: {

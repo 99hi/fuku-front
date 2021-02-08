@@ -215,6 +215,8 @@ export default {
             type: "success",
             message: "更新しました",
           });
+          this.$store.dispatch("coordinate/coordinate");
+          this.$store.dispatch(`tag/CoordinateTag`);
         });
     },
     deleteCoordinate() {

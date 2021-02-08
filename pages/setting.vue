@@ -89,6 +89,7 @@
       </v-card>
     </v-row>
 
+    <!-- share -->
     <v-row no-gutters style="width: 100vw">
       <v-list class="item" width="100%">
         <v-subheader>SHARE</v-subheader>
@@ -196,6 +197,8 @@
         <v-divider></v-divider>
       </v-list>
     </v-row>
+
+    <!-- weather -->
     <v-row no-gutters style="width: 100vw">
       <v-list class="item" width="100%">
         <v-subheader>WEATHER</v-subheader>
@@ -241,6 +244,66 @@
         <v-divider></v-divider>
       </v-list>
     </v-row>
+
+    <!-- tag -->
+    <v-row no-gutters style="width: 100vw">
+      <v-dialog v-model="tag" fullscreen hide-overlay transition="slide-x-transition">
+        <tagList @clickback="tagClose" :type="tagwhich"></tagList>
+      </v-dialog>
+      <v-list class="item" width="100%">
+        <v-subheader>TAG</v-subheader>
+        <v-divider></v-divider>
+        <v-list-item style="height: 60px">
+          <v-col cols="8">
+            <v-list-item-content class="text-content">
+              <v-list-item-title>Clothes</v-list-item-title>
+            </v-list-item-content>
+          </v-col>
+
+          <v-col cols="4" style="text-align: right">
+            <v-list-item-action class="mx-0">
+              <v-btn
+                @click="
+                  tag = true;
+                  tagwhich = 'Clothes';
+                "
+                color="#2C4B70"
+                depressed
+                rounded
+                outlined
+                >{{ $store.getters["tag/getClothesTag"].length }}</v-btn
+              >
+            </v-list-item-action>
+          </v-col>
+        </v-list-item>
+        <v-divider></v-divider>
+        <v-list-item style="height: 60px">
+          <v-col cols="8">
+            <v-list-item-content class="text-content">
+              <v-list-item-title>Coordinate</v-list-item-title>
+            </v-list-item-content>
+          </v-col>
+
+          <v-col cols="4" style="text-align: right">
+            <v-list-item-action class="mx-0">
+              <v-btn
+                @click="
+                  tag = true;
+                  tagwhich = 'Coordinate';
+                "
+                color="#2C4B70"
+                depressed
+                rounded
+                outlined
+                >{{ $store.getters["tag/getCoordinateTag"].length }}</v-btn
+              >
+            </v-list-item-action>
+          </v-col>
+        </v-list-item>
+        <v-divider></v-divider>
+      </v-list>
+    </v-row>
+
     <v-row style="width: 100vw">
       <v-col cols="12" style="text-align: center" class="mt-2 mb-9">
         <v-btn @click="logout" ripple outlined color=" red darken-1">ログアウト</v-btn>
@@ -251,9 +314,12 @@
 
 <script>
 import weatherArea from "~/components/weatherArea.vue";
+import tagList from "~/components/tagList.vue";
+
 export default {
   components: {
     weatherArea,
+    tagList,
   },
   data() {
     return {
@@ -275,6 +341,8 @@ export default {
       season: [],
       area: false,
       dialog: false,
+      tag: false,
+      tagwhich: "",
       confirm: false,
     };
   },
@@ -341,6 +409,9 @@ export default {
     },
     close() {
       this.area = false;
+    },
+    tagClose() {
+      this.tag = false;
     },
     logout() {
       this.$auth.logout();

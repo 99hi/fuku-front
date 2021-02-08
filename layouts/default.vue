@@ -51,6 +51,8 @@ export default {
     this.$store.dispatch("getArea");
     this.$store.dispatch("clothes/shareCloset");
     this.$store.dispatch("clothes/shareUserList");
+    this.$store.dispatch("tag/ClothesTag");
+    this.$store.dispatch("tag/CoordinateTag");
   },
 };
 </script>

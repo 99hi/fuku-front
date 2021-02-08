@@ -319,15 +319,16 @@ export default {
     update() {
       this.clothes.tags = this.selectedTag;
       this.clothes.seasons = this.selectedSeason;
-      this.$store.commit("changeAlert", {
-        type: "success",
-        message: "更新しました",
-      });
+
       this.$axios
         .put("/api/clothes/update/" + this.clothes.id, { data: this.clothes })
         .then((res) => {
-          console.log(res.data);
+          this.$store.commit("changeAlert", {
+            type: "success",
+            message: "更新しました",
+          });
           this.$store.dispatch("clothes/checkClothes");
+          this.$store.dispatch(`tag/ClothesTag`);
         });
     },
     deleteClothes() {
