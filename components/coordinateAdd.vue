@@ -5,19 +5,13 @@
     >
 
     <v-container fluid>
-      <v-dialog
-        v-model="dialog"
-        fullscreen
-        hide-overlay
-        transition="dialog-bottom-transition"
-      >
+      <v-dialog v-model="dialog" fullscreen hide-overlay transition="slide-x-transition">
         <v-card>
-          <v-toolbar>
+          <v-toolbar flat height="48px" class="page-title">
             <v-btn icon @click="dialog = false">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
-            <v-toolbar-title>コーディネートの追加</v-toolbar-title>
-            <v-spacer></v-spacer>
+            <v-toolbar-title>コーディネート 追加</v-toolbar-title>
           </v-toolbar>
 
           <v-row justify="center" class="ma-2">
@@ -90,66 +84,70 @@
             ></croppa>
           </v-row>
 
-          <v-row justify="center" class="px-5">
-            <v-col cols="3">
-              <v-checkbox
-                v-model="selectedSeason"
-                label="春"
-                color="#F06292"
-                value="1"
-                hide-details
-              ></v-checkbox>
-            </v-col>
+          <v-form class="add-form">
+            <v-container>
+              <v-row justify="center" class="px-5">
+                <v-col cols="3">
+                  <v-checkbox
+                    v-model="selectedSeason"
+                    label="春"
+                    color="#F06292"
+                    value="1"
+                    hide-details
+                  ></v-checkbox>
+                </v-col>
 
-            <v-col cols="3">
-              <v-checkbox
-                v-model="selectedSeason"
-                label="夏"
-                color="#03A9F4"
-                value="2"
-                hide-details
-              ></v-checkbox>
-            </v-col>
+                <v-col cols="3">
+                  <v-checkbox
+                    v-model="selectedSeason"
+                    label="夏"
+                    color="#03A9F4"
+                    value="2"
+                    hide-details
+                  ></v-checkbox>
+                </v-col>
 
-            <v-col cols="3">
-              <v-checkbox
-                v-model="selectedSeason"
-                label="秋"
-                color="#795548"
-                value="3"
-                hide-details
-              ></v-checkbox>
-            </v-col>
+                <v-col cols="3">
+                  <v-checkbox
+                    v-model="selectedSeason"
+                    label="秋"
+                    color="#795548"
+                    value="3"
+                    hide-details
+                  ></v-checkbox>
+                </v-col>
 
-            <v-col cols="3">
-              <v-checkbox
-                v-model="selectedSeason"
-                label="冬"
-                color="#607D8B"
-                value="4"
-                hide-details
-              ></v-checkbox>
-            </v-col>
+                <v-col cols="3">
+                  <v-checkbox
+                    v-model="selectedSeason"
+                    label="冬"
+                    color="#607D8B"
+                    value="4"
+                    hide-details
+                  ></v-checkbox>
+                </v-col>
 
-            <v-col cols="12">
-              <v-combobox
-                clearable
-                multiple
-                :items="tags"
-                item-text="name"
-                item-value="id"
-                v-model="selectedTags"
-                label="タグ付け"
-                append-icon
-                chips
-                deletable-chips
-                :search-input.sync="search"
-                @keyup.tab="updateTags"
-                @paste="updateTags"
-              >
-              </v-combobox>
-            </v-col>
-          </v-row>
+                <v-col cols="12">
+                  <v-combobox
+                    clearable
+                    multiple
+                    :items="tags"
+                    item-text="name"
+                    item-value="id"
+                    v-model="selectedTags"
+                    label="タグ付け"
+                    append-icon
+                    chips
+                    deletable-chips
+                    :search-input.sync="search"
+                    @keyup.tab="updateTags"
+                    @paste="updateTags"
+                  >
+                  </v-combobox>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-form>
 
           <v-row justify="center" v-if="toggle === 0">
             <v-btn
@@ -375,6 +373,9 @@ ul {
   -moz-column-count: 2;
   column-count: 2;
 }
+.page-title {
+  border-bottom: 1px solid gainsboro;
+}
 .stage {
   width: 300px;
   height: 400px;
@@ -402,6 +403,12 @@ ul {
   z-index: 5;
   margin-left: -5px;
   margin-top: -20px;
+}
+
+.add-form {
+  margin: 0 auto;
+  max-width: 500px;
+  width: 90%;
 }
 /* 
 .html2canvas-container {

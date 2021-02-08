@@ -1,9 +1,10 @@
 <template>
-  <v-container>
+  <div class="setting">
     <v-toolbar flat height="48px" class="page-title">
       <v-toolbar-title>設定</v-toolbar-title>
     </v-toolbar>
 
+    <!-- 確認ダイアログ -->
     <v-dialog v-model="confirm" max-width="250px">
       <v-card justify="center">
         <v-card-title class="headline"></v-card-title>
@@ -24,7 +25,8 @@
       </v-card>
     </v-dialog>
 
-    <v-row justify="center" class="ma-5">
+    <!-- profile -->
+    <v-row class="profile">
       <v-avatar height="100px" width="100px">
         <img :src="$store.state.auth.user.picture" />
       </v-avatar>
@@ -34,7 +36,8 @@
       $store.state.auth.user.name
     }}</v-row>
 
-    <v-row justify="center" class="my-3 mx-auto" style="width: 100vw">
+    <!-- マイクローゼット -->
+    <v-row justify="center" class="my-3 mx-auto">
       <v-card shaped elevation="2" class="closet">
         <v-card-text>
           <div>MY CLOSET</div>
@@ -90,7 +93,7 @@
     </v-row>
 
     <!-- share -->
-    <v-row no-gutters style="width: 100vw">
+    <v-row no-gutters class="setting-row">
       <v-list class="item" width="100%">
         <v-subheader>SHARE</v-subheader>
         <v-divider></v-divider>
@@ -133,7 +136,7 @@
               </template>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <v-container fluid>
+              <v-container>
                 <v-list v-if="$store.getters['clothes/getShareUserList'].length !== 0">
                   <v-list-item
                     v-for="(user, key) in $store.getters['clothes/getShareUserList']"
@@ -158,7 +161,7 @@
                 <v-divider></v-divider>
                 <v-form v-model="valid" ref="form" lazy-validation>
                   <v-container>
-                    <v-row>
+                    <v-row justify="center">
                       <v-col cols="5" md="4">
                         <v-text-field
                           v-model="addUser.name"
@@ -199,7 +202,7 @@
     </v-row>
 
     <!-- weather -->
-    <v-row no-gutters style="width: 100vw">
+    <v-row no-gutters class="setting-row">
       <v-list class="item" width="100%">
         <v-subheader>WEATHER</v-subheader>
         <v-divider></v-divider>
@@ -246,7 +249,7 @@
     </v-row>
 
     <!-- tag -->
-    <v-row no-gutters style="width: 100vw">
+    <v-row no-gutters class="setting-row">
       <v-dialog v-model="tag" fullscreen hide-overlay transition="slide-x-transition">
         <tagList @clickback="tagClose" :type="tagwhich"></tagList>
       </v-dialog>
@@ -304,12 +307,12 @@
       </v-list>
     </v-row>
 
-    <v-row style="width: 100vw">
+    <v-row class="setting-row">
       <v-col cols="12" style="text-align: center" class="mt-2 mb-9">
         <v-btn @click="logout" ripple outlined color=" red darken-1">ログアウト</v-btn>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -469,7 +472,14 @@ export default {
 </script>
 
 <style scoped>
+.setting {
+  width: 100vw;
+  max-width: 960px;
+}
 .page-title {
+  width: 100vw;
+  max-width: 960px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   border-bottom: 1px solid gainsboro;
@@ -480,6 +490,14 @@ export default {
   max-width: 50px;
 }
 
+.profile {
+  width: 100vw;
+  max-width: 960px;
+  text-align: center;
+  margin: 20px auto;
+  justify-content: center;
+}
+
 .name {
   margin: 0;
   height: 35px;
@@ -488,7 +506,6 @@ export default {
 }
 
 .closet {
-  width: 80%;
   position: relative;
 }
 .closet .season {
@@ -499,6 +516,11 @@ export default {
 .closet .season .category {
   position: relative;
   width: 40px;
+}
+
+.setting-row {
+  width: 100vw;
+  max-width: 960px;
 }
 
 .v-application--is-ltr .v-btn-toggle > .v-btn.v-btn:not(:first-child) {

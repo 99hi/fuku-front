@@ -27,7 +27,7 @@
             </v-list-item>
           </v-list>
         </v-menu>
-        <div class="closet-menu-item">
+        <div class="closet-menu-item text-right">
           <closetSort @filter="applyFilter"></closetSort>
         </div>
       </div>
@@ -56,11 +56,14 @@
         class=""
       >
         <v-container fluid>
-          <v-row style="width: 100vw">
+          <v-row style="width: 100%" class="mx-auto">
             <v-col
               v-for="clothes in getFilteredClothes[tab]"
               :key="clothes.id"
               cols="4"
+              lg="2"
+              md="3"
+              sm="3"
               class="pa-2 clothes"
             >
               <v-checkbox
@@ -94,8 +97,8 @@
       <div
         class="v-dialog v-bottom-sheet v-bottom-sheet--inset v-dialog--active v-dialog--persistent selected-clothes"
       >
-        <v-sheet class="text-center" height="70px" width="100vw">
-          <v-row class="pa-1">
+        <v-sheet class="text-center" height="70px">
+          <v-row class="pa-1 mx-auto" style="max-width: 960px">
             <v-col
               cols="2"
               v-for="clothes in selectedCoordinate.slice(0, 4)"
@@ -296,12 +299,14 @@ export default {
   left: 0;
   z-index: 1;
   background-color: #fff;
-  width: 100vw;
+  width: 100%;
 }
 
 .closet-menu {
   height: 50px;
   width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -317,6 +322,9 @@ export default {
 
 .closet-tabs-items {
   min-height: 100vh;
+  width: 100vw;
+  max-width: 960px;
+  margin: 0 auto;
 }
 .true-weather {
   margin-top: 154px;
@@ -348,5 +356,6 @@ export default {
   position: fixed;
   bottom: 0;
   margin: 0;
+  max-width: 960px !important;
 }
 </style>

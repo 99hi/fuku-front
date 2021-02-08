@@ -15,22 +15,23 @@
     <div style="height: 100vh">
       <v-container>
         <v-row class="main mx-auto">
-          <div
+          <v-col
+            cols="6"
+            lg="3"
+            md="4"
+            sm="4"
             class="stage"
             v-for="coordinate in $store.getters['coordinate/filteredCoordinate']"
             :key="coordinate.id"
           >
-            <div>
-              <v-img
-                contain
-                :src="coordinate.url"
-                :width="180"
-                :height="200"
-                @click="openAbout(coordinate)"
-                class="mx-auto"
-              ></v-img>
-            </div>
-          </div>
+            <v-img
+              contain
+              :src="coordinate.url"
+              height="100%"
+              @click="openAbout(coordinate)"
+              class="mx-auto"
+            ></v-img>
+          </v-col>
         </v-row>
       </v-container>
     </div>
@@ -102,6 +103,9 @@ export default {
 
 <style scoped>
 .page-title {
+  width: 100vw;
+  max-width: 960px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   border-bottom: 1px solid gainsboro;
@@ -109,9 +113,7 @@ export default {
 
 .stage {
   width: 49vw;
-  height: 200px;
-  margin: 1px;
-  background-color: #f1f1f1;
+  height: 30vh;
   display: inline-block;
 }
 
@@ -119,7 +121,7 @@ export default {
   border: none;
 }
 .main {
-  width: 100vw;
+  width: 100%;
   margin-top: 98px;
 }
 .closet-top-bar {
@@ -128,11 +130,13 @@ export default {
   left: 0;
   z-index: 1;
   background-color: #fff;
-  width: 100vw;
+  width: 100%;
 }
 .closet-menu {
   height: 50px;
   width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
   display: flex;
   justify-content: flex-end;
   align-items: center;

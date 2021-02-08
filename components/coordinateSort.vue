@@ -234,6 +234,7 @@ export default {
   top: 0;
   right: 0;
   height: 100vh !important;
+  max-width: 600px;
 }
 
 .closet-sort .v-overlay__scrim {

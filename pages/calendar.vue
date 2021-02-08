@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100vw" class="calendar">
+  <div class="calendar">
     <v-toolbar flat height="48px" class="page-title">
       <v-toolbar-title>カレンダー</v-toolbar-title>
     </v-toolbar>
@@ -122,7 +122,9 @@
       tile
       height="6vh"
       color="grey lighten-3"
-      class="d-flex align-center mt-2 calendar"
+      class="d-flex align-center mt-2"
+      max-width="960px"
+      width="100vw"
     >
       <v-toolbar flat>
         <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
@@ -141,7 +143,7 @@
       </v-toolbar>
     </v-sheet>
     <!-- カレンダー -->
-    <v-sheet height="75vh" class="mt-2 px-1" width="100vw">
+    <v-sheet height="75vh" class="mt-2 px-1" max-width="960px" width="100vw">
       <v-calendar
         v-model="focus"
         ref="calendar"
@@ -292,7 +294,14 @@ export default {
 </script>
 
 <style scoped>
+.calendar {
+  width: 100%;
+  max-width: 960px;
+}
 .page-title {
+  width: 100vw;
+  max-width: 960px;
+  margin: 0 auto;
   display: flex;
   justify-content: center;
   border-bottom: 1px solid gainsboro;

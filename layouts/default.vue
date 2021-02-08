@@ -4,7 +4,7 @@
     <!-- ヘッダー -->
 
     <!-- メイン -->
-    <v-main class="mb-14">
+    <v-main class="mb-14 main">
       <v-container>
         <nuxt />
       </v-container>
@@ -60,6 +60,11 @@ export default {
 <style>
 .container {
   padding: 0 !important;
+}
+
+.main {
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .v-card {
