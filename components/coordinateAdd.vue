@@ -7,7 +7,7 @@
     <v-container fluid>
       <v-dialog v-model="dialog" fullscreen hide-overlay transition="slide-x-transition">
         <v-card>
-          <v-toolbar flat height="48px" class="page-title">
+          <v-toolbar>
             <v-btn icon @click="dialog = false">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
@@ -356,9 +356,6 @@ ul {
   -webkit-column-count: 2;
   -moz-column-count: 2;
   column-count: 2;
-}
-.page-title {
-  border-bottom: 1px solid gainsboro;
 }
 .stage {
   width: 300px;

@@ -29,16 +29,11 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-model="dialog"
-      fullscreen
-      hide-overlay
-      transition="dialog-bottom-transition"
-    >
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="slide-x-transition">
       <v-card>
         <v-toolbar>
           <v-btn icon @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
+            <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
           <v-toolbar-title>コーディネートの詳細</v-toolbar-title>
           <v-spacer></v-spacer>

@@ -2,7 +2,7 @@
   <div class="tagList">
     <v-toolbar flat height="48px" class="page-title">
       <v-btn icon @click="clickback">
-        <v-icon>mdi-arrow-left</v-icon>
+        <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
       <v-toolbar-title class="d-flex text-center">{{ type }} タグ</v-toolbar-title>
     </v-toolbar>
