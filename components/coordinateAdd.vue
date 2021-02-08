@@ -176,7 +176,7 @@
                 loading = true;
                 upload();
               "
-              :disabled="btnDisabled === true && selectedCoordinate.length === 0"
+              :disabled="btnDisabled === true"
               >コーデ追加</v-btn
             >
           </v-row>
@@ -215,12 +215,9 @@ export default {
   },
   methods: {
     remove(clothes) {
-      console.log("削除クリック");
       this.$store.commit("clothes/deleteSelectedClothes", clothes);
     },
     async openAdd() {
-      console.log("コーディネート追加が実行");
-      console.log(this.data);
       this.dialog = !this.dialog;
       this.clothesList = this.data;
       this.clothesList.map((clothes, index) => {
@@ -234,7 +231,6 @@ export default {
     add() {
       console.log("add");
       this.$axios.post("/api/coordination/add", this.clothesList).then((res) => {
-        console.log(res.data);
         this.$store.commit("changeAlert", {
           type: "success",
           message: "コーディネートを追加しました",
@@ -242,24 +238,17 @@ export default {
       });
     },
     onResizstop(left, top, width, height) {
-      console.log("リサイズ");
-      console.log();
       this.clothesList[this.activeIndex].x = left;
       this.clothesList[this.activeIndex].y = top;
       this.clothesList[this.activeIndex].w = width;
       this.clothesList[this.activeIndex].h = height;
-      console.log(this.clothesList[this.activeIndex]);
     },
     onDragstop(left, top) {
       this.clothesList[this.activeIndex].x = left;
       this.clothesList[this.activeIndex].y = top;
-      console.log(this.clothesList[this.activeIndex]);
     },
     onActivated(index) {
-      console.log("アクティブ");
-
       this.activeIndex = index;
-      console.log(this.activeIndex);
     },
 
     //コーデ画像
@@ -270,7 +259,6 @@ export default {
       this.btnDisabled = true;
     },
     onFileTypeMismatch(file) {
-      console.log("ファイルが違う");
       this.$store.commit("changeAlert", {
         type: "error",
         message: "jpg,png形式でアップして下さい",
@@ -305,8 +293,6 @@ export default {
           upload_preset: process.env.CLOUDINARY_UPLOADPRESET,
         })
         .then((res) => {
-          console.log("Success!!");
-          console.log(res);
           this.upUrl = res.secure_url;
           this.cloudinary_id = res.public_id;
           this.myCroppa.refresh();
@@ -314,7 +300,6 @@ export default {
           this.loading = false;
         });
       //データベース追加
-      console.log("データベース追加");
       this.$axios
         .post("/api/coordination/add", {
           url: this.upUrl ? this.upUrl : null,
@@ -325,7 +310,6 @@ export default {
         })
         .then((res) => {
           //設定のリセット
-          console.log(res.data);
           this.selectedSeason = [];
           this.loading = false;
           this.$store.commit("changeAlert", {

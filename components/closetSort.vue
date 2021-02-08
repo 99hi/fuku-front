@@ -35,7 +35,7 @@
               </v-row>
             </template>
           </v-expansion-panel-header>
-          <v-expansion-panel-content style="height: 400px">
+          <v-expansion-panel-content>
             <v-container class="px-0" fluid>
               <v-autocomplete
                 v-model="filterQuery.tags"

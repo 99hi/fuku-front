@@ -36,7 +36,7 @@
           <v-col cols="12">
             <v-select
               v-model="selectedCategory"
-              :items="category"
+              :items="$store.getters['clothes/getCategory']"
               label="カテゴリ"
               dense
               prepend
@@ -101,7 +101,7 @@
             <v-combobox
               clearable
               multiple
-              :items="tags"
+              :items="$store.getters['tag/getClothesTag']"
               item-text="name"
               item-value="id"
               v-model="selectedTags"
@@ -138,7 +138,6 @@ export default {
     return {
       myCroppa: null,
       imgUrl: "",
-      category: ["トップス", "アウター", "パンツ", "シューズ"],
       selectedCategory: "トップス",
       selectedColor: "",
       colors: [
@@ -193,21 +192,12 @@ export default {
       ],
       selectedSeason: [],
       selectedTags: [],
-      tags: [],
       search: null,
       loading: false,
       btnDisabled: true,
     };
   },
-  mounted() {
-    this.getTags();
-  },
   methods: {
-    getTags() {
-      this.$axios.get("/api/tag/clothes").then((res) => {
-        this.tags = res.data;
-      });
-    },
     // タグ入力用
     updateTags() {
       this.$nextTick(() => {

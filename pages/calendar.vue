@@ -17,12 +17,17 @@
                 <v-img :src="showCoordinate.coordination.url"></v-img>
               </v-col>
             </v-row>
+            <span>{{ showCoordinate.start }}</span>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" text @click="eventDelete"> 削除 </v-btn>
+          <v-btn color="red darken-1" outlined ripple text @click="eventDelete">
+            削除
+          </v-btn>
           <v-btn
+            outlined
+            ripple
             text
             @click="
               coodinateDialog = false;
@@ -41,6 +46,7 @@
         <v-card-title>
           <span class="headline">コーデ登録</span>
         </v-card-title>
+        <v-card-subtitle class="text-right">{{ register.start }}</v-card-subtitle>
         <v-card-text>
           <v-flex>
             <v-row justify="center" align="center"
@@ -105,14 +111,16 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            color="green darken-1"
+            color="blue darken-1"
+            outlined
+            ripple
             text
             @click="submit"
             :disabled="!register.selected || register.name.length == 0"
           >
             登録
           </v-btn>
-          <v-btn text @click="dialog = false"> 閉じる </v-btn>
+          <v-btn text outlined ripple @click="dialog = false"> 閉じる </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -308,7 +316,7 @@ export default {
 }
 
 .isActive {
-  border: 4px solid blue;
+  border: 4px solid #2196f3;
 }
 
 .select-coordinate {

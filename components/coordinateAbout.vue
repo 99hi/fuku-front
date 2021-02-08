@@ -15,8 +15,8 @@
           <v-btn
             outlined
             ripple
-            color="blue darken-1"
             text
+            color="blue darken-1"
             :loading="loading"
             @click="
               loading = true;

@@ -181,7 +181,14 @@ export default {
   },
   methods: {
     openAbout(clothes) {
-      this.$refs.clothesAbout.showAbout(clothes);
+      if (clothes.user_id === this.$auth.user.id) {
+        this.$refs.clothesAbout.showAbout(clothes);
+      } else {
+        this.$store.commit("changeAlert", {
+          type: "warning",
+          message: "シェアされたクローゼットの詳細は開けません",
+        });
+      }
     },
     handleScroll() {
       // 現在アクティブなタブのスクロール位置を保持
