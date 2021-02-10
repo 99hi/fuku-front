@@ -44,11 +44,11 @@
           <v-row class="flex-column season">
             <v-btn-toggle
               v-model="season"
-              style="flex-direction: column"
               dense
               tile
               color="primary"
               multiple
+              style="flex-direction: column"
             >
               <v-btn text color="#F06292" value="春">春</v-btn>
               <v-btn text color="#03A9F4" value="夏">夏</v-btn>
@@ -57,24 +57,28 @@
             </v-btn-toggle>
           </v-row>
           <v-row
-            class="text-right mr-1"
+            class="text-right mr-5 closet-row"
             justify="end"
-            v-if="$store.state.clothes.clothesList.length"
+            align-content="center"
+            align="center"
+            v-for="(item, idnex) in count"
+            :key="idnex"
           >
-            <v-col
-              v-for="(item, key) in count"
-              :key="key"
-              cols="5"
-              elevation="0"
-              class="category"
-            >
-              <p class="font-weight-black num ma-0 title">
-                {{ item.num }}
-              </p>
-              <p>{{ item.name }}</p>
+            <v-col cols="3" elevation="0" class="category">
+              <div class="icon">
+                <v-img :src="`/closet/${idnex}.svg`"></v-img>
+              </div>
             </v-col>
+            <v-col cols="3" style="justify-content: center" class="px-0 text-left">{{
+              item.name
+            }}</v-col>
+            <v-col cols="2" class="px-0"
+              ><p class="font-weight-black num ma-0 title">
+                {{ item.num }}
+              </p></v-col
+            >
           </v-row>
-          <v-row class="text-right mr-1" justify="end" v-else>
+          <!-- <v-row class="text-right mr-1" justify="end" v-else>
             <v-col
               v-for="(item, key) in 4"
               :key="key"
@@ -87,7 +91,7 @@
               </p>
               <p>{{ item.name ? item.name : "???" }}</p>
             </v-col>
-          </v-row>
+          </v-row> -->
         </v-card-text>
       </v-card>
     </v-row>
@@ -437,7 +441,7 @@ export default {
       },
     },
     count() {
-      let categories = ["トップス", "アウター", "パンツ", "シューズ"];
+      let categories = this.$store.getters["clothes/getCategory"];
       let count = [];
       if (this.season.length === 0) {
         categories.forEach((cate, index) => {
@@ -507,20 +511,36 @@ export default {
 
 .closet {
   position: relative;
+  width: 90vw;
+  max-width: 400px;
+}
+
+.closet-row {
+  height: 56px;
 }
 .closet .season {
   position: absolute;
   top: 60px;
-  left: 30px;
+  left: 35px;
 }
 .closet .season .category {
   position: relative;
   width: 40px;
+  max-height: 30px;
+}
+
+.category .icon {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  padding: 7px;
+  background-color: rgba(179, 180, 184, 0.5);
 }
 
 .setting-row {
   width: 100vw;
   max-width: 960px;
+  margin: 0;
 }
 
 .v-application--is-ltr .v-btn-toggle > .v-btn.v-btn:not(:first-child) {

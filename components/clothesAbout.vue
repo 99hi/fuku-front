@@ -43,8 +43,8 @@
         </v-toolbar>
         <v-list three-line subheader>
           <v-list-item>
-            <v-list-item-content>
-              <v-img :src="clothes.url"></v-img>
+            <v-list-item-content style="justify-content: center">
+              <v-img :src="clothes.url" width="100%" max-width="500px"></v-img>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -208,7 +208,7 @@
           </v-slide-group>
         </v-sheet>
 
-        <v-row justify="center" class="mt-4 pa-2" style="width: 100vw">
+        <v-row justify="center" class="mt-4 mx-auto pa-2" style="width: 100%">
           <v-btn ripple outlined color="red darken-1" @click="update">更新</v-btn>
         </v-row>
       </v-card>
