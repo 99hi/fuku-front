@@ -49,11 +49,10 @@ export default {
 .container {
   padding: 0 !important;
 }
-
+/* 
 .main {
   max-width: 960px;
-  margin: 0 auto;
-}
+} */
 
 .v-card {
   border-radius: 0;

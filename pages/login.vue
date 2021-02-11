@@ -1,8 +1,8 @@
 <template>
-  <v-container class="login">
+  <div class="login">
     <v-row>
       <v-col cols="12"
-        ><v-img src="/icon.png" width="60vw" class="mx-auto"></v-img
+        ><v-img src="/icon.png" width="60%" max-width="500px" class="mx-auto"></v-img
       ></v-col>
       <v-col>
         <h3>LOGIN</h3>
@@ -38,7 +38,7 @@
         </v-btn>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -69,14 +69,12 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  height: 100vh !important;
-  width: 100vw;
-}
 .login {
   position: fixed;
+  left: 0;
   z-index: 5;
   height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
