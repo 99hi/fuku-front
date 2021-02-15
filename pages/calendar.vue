@@ -305,6 +305,7 @@ export default {
 .calendar {
   width: 100%;
   max-width: 960px;
+  margin: 0 auto;
 }
 .page-title {
   width: 100vw;

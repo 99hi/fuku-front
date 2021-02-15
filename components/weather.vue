@@ -14,12 +14,6 @@
       <div class="d-flex flex-column align-center pt-2" v-for="n of 4" :key="n">
         <span>{{ new Date(weatherResult[(n - 1) * 2].dt * 1000).getHours() }}時</span>
         <v-avatar size="35" tile>
-          <!-- <v-img
-            class="icon mb-2"
-            :src="`/weather/${
-              weatherResult[(n - 1) * 2].weather[0].icon.slice(0, -1) + 'd'
-            }.svg`"
-          ></v-img> -->
           <v-img
             class="icon mb-2"
             :src="`https://openweathermap.org/img/wn/${

@@ -12,13 +12,13 @@
     </div>
 
     <coordinateAbout ref="coordinateAbout"></coordinateAbout>
-    <div style="height: 100vh">
+    <div style="min-height: 100vh">
       <v-container>
         <v-row class="main mx-auto">
           <v-col
             cols="6"
-            lg="3"
-            md="4"
+            lg="2"
+            md="3"
             sm="4"
             class="stage"
             v-for="coordinate in $store.getters['coordinate/filteredCoordinate']"

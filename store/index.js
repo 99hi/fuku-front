@@ -8,7 +8,7 @@ export const state = () => ({
     city: "",
     romaji: ""
   },
-  weatherFlag: false
+  weatherFlag: Number
 })
 
 export const getters = {
@@ -42,18 +42,6 @@ export const mutations = {
 }
 
 export const actions = {
-  // async nuxtServerInit({ commit }, { app }) {
-  //     await app.$axios
-  //         .get("/user")
-  //         .then(response => {
-  //             commit("login/setUser", response.user);
-  //             commit("login/setLoggedIn", true);
-  //         })
-  //         .catch(() => {
-  //             commit("login/setUser", null);
-  //             commit("login/setLoggedIn", false);
-  //         });
-  // }
   async getArea({ commit }) {
     const json = require(`~/assets/city.json`);
     const weather = await this.$axios.get('/api/weather/get').then((res) => { return res.data })
