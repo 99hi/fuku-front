@@ -54,7 +54,22 @@
               dense
               prepend
               required
-            ></v-select>
+            >
+              <template v-slot:item="{ item }"
+                ><span
+                  ><v-avatar class="color-tile" tile :color="item.value" size="20">
+                  </v-avatar
+                  >{{ item.label }}</span
+                ></template
+              >
+              <template v-slot:selection="{ item }"
+                ><span
+                  ><v-avatar class="color-tile" tile :color="item.value" size="20">
+                  </v-avatar
+                  >{{ item.label }}</span
+                ></template
+              >
+            </v-select>
           </v-col>
 
           <v-col cols="3">
@@ -156,10 +171,6 @@ export default {
         {
           label: "ブラウン系",
           value: "brown",
-        },
-        {
-          label: "ベージュ系",
-          value: "beige",
         },
         {
           label: "グリーン系",
@@ -290,5 +301,11 @@ export default {
   margin: 0 auto;
   max-width: 500px;
   width: 90%;
+}
+
+.color-tile {
+  vertical-align: middle;
+  border: 1px solid black !important;
+  margin-right: 10px;
 }
 </style>

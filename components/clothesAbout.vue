@@ -86,7 +86,18 @@
                   <v-col cols="8" class="text--secondary">
                     <v-fade-transition leave-absolute>
                       <span v-if="open" key="0"> 色を選択 </span>
-                      <span v-else key="1">{{ clothes.color }}</span>
+                      <span v-else key="1"
+                        ><span v-if="clothes.color !== null"
+                          ><v-avatar
+                            class="color-tile"
+                            tile
+                            :color="clothes.color"
+                            size="20"
+                          >
+                          </v-avatar
+                          >{{ clothes.color }}</span
+                        ></span
+                      >
                     </v-fade-transition>
                   </v-col>
                 </v-row>
@@ -100,7 +111,14 @@
                     :key="key"
                     :label="color.label"
                     :value="color.value"
-                  ></v-radio>
+                    ><template v-slot:label v-if="color.value !== ''"
+                      ><span
+                        ><v-avatar class="color-tile" tile :color="color.value" size="20">
+                        </v-avatar
+                        >{{ color.label }}</span
+                      ></template
+                    ></v-radio
+                  >
                 </v-radio-group>
               </v-container>
             </v-expansion-panel-content>
@@ -245,10 +263,6 @@ export default {
           value: "brown",
         },
         {
-          label: "ベージュ系",
-          value: "beige",
-        },
-        {
           label: "グリーン系",
           value: "green",
         },
@@ -363,5 +377,11 @@ export default {
 
 .color-sheet {
   border: 2px solid black;
+}
+
+.color-tile {
+  vertical-align: middle;
+  border: 1px solid black !important;
+  margin-right: 10px;
 }
 </style>

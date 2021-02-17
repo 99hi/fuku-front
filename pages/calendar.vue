@@ -50,14 +50,14 @@
         <v-card-text>
           <v-flex>
             <v-row justify="center" align="center"
-              ><v-col cols="7" align-self="center">
+              ><v-col cols="6" align-self="center">
                 <v-text-field
                   label="タイトル (必須)"
                   required
                   v-model="register.name"
                 ></v-text-field>
               </v-col>
-              <v-col cols="5" align-self="center" class="color"
+              <v-col cols="6" align-self="center" class="color"
                 ><v-select
                   v-model="register.color"
                   :items="colors"
@@ -66,8 +66,23 @@
                   dense
                   prepend
                   required
-                ></v-select></v-col
-            ></v-row>
+                  ><template v-slot:item="{ item }"
+                    ><span
+                      ><v-avatar class="color-tile" tile :color="item.value" size="15">
+                      </v-avatar
+                      >{{ item.label }}</span
+                    ></template
+                  >
+                  <template v-slot:selection="{ item }"
+                    ><span style="font-size: 14px"
+                      ><v-avatar class="color-tile" tile :color="item.value" size="15">
+                      </v-avatar
+                      >{{ item.label }}</span
+                    ></template
+                  ></v-select
+                ></v-col
+              ></v-row
+            >
             <v-row class="select-coordinate">
               <v-col
                 cols="6"
@@ -186,10 +201,6 @@ export default {
         {
           label: "ブラウン系",
           value: "brown",
-        },
-        {
-          label: "ベージュ系",
-          value: "beige",
         },
         {
           label: "グリーン系",
@@ -323,6 +334,12 @@ export default {
 .select-coordinate {
   height: 50vh;
   overflow: auto;
+}
+
+.color-tile {
+  vertical-align: middle;
+  border: 1px solid black !important;
+  margin-right: 10px;
 }
 </style>
 
