@@ -63,7 +63,9 @@ export default {
     },
   },
   created() {
-    this.getWeather();
+    if (this.$store.state.weatherFlag === 1) {
+      this.getWeather();
+    }
   },
   computed: {
     areaWatch() {
