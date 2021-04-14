@@ -1,5 +1,5 @@
 <template>
-  <v-card style="position: relative">
+  <v-card style="position: relative" class="coordinate">
     <div class="closet-top-bar">
       <v-toolbar flat height="48px" class="page-title">
         <v-toolbar-title>コーディネート一覧</v-toolbar-title>
@@ -102,6 +102,10 @@ export default {
 </script>
 
 <style scoped>
+.coordinate {
+  max-width: 960px;
+  margin: 0 auto;
+}
 .page-title {
   width: 100vw;
   max-width: 960px;

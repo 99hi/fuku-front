@@ -1,5 +1,5 @@
 <template>
-  <v-card style="position: relative">
+  <v-card style="position: relative" class="closet-page">
     <div class="closet-top-bar">
       <weather></weather>
       <v-divider></v-divider>
@@ -297,6 +297,10 @@ export default {
 </script>
 
 <style>
+.closet-page {
+  max-width: 960px;
+  margin: 0 auto;
+}
 .closet-top-bar {
   position: fixed;
   top: 0;
