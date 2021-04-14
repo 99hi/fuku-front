@@ -37,7 +37,7 @@
     }}</v-row>
 
     <!-- マイクローゼット -->
-    <v-row justify="center" class="my-3 mx-auto">
+    <v-row justify="center" class="my-3 mx-auto" v-if="count.length !== 0">
       <v-card shaped elevation="2" class="closet">
         <v-card-text>
           <div>MY CLOSET</div>
@@ -78,20 +78,6 @@
               </p></v-col
             >
           </v-row>
-          <!-- <v-row class="text-right mr-1" justify="end" v-else>
-            <v-col
-              v-for="(item, key) in 4"
-              :key="key"
-              cols="5"
-              elevation="0"
-              class="category"
-            >
-              <p class="font-weight-black num ma-0 title">
-                {{ item.num ? item.num : "???" }}
-              </p>
-              <p>{{ item.name ? item.name : "???" }}</p>
-            </v-col>
-          </v-row> -->
         </v-card-text>
       </v-card>
     </v-row>
@@ -479,6 +465,7 @@ export default {
 .setting {
   width: 100vw;
   max-width: 960px;
+  margin: 0 auto;
 }
 .page-title {
   width: 100vw;

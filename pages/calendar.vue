@@ -247,7 +247,6 @@ export default {
       this.focus = "";
     },
     showEvent({ event }) {
-      console.log(event);
       this.showCoordinate = event;
       this.coodinateDialog = true;
     },
@@ -272,10 +271,7 @@ export default {
     },
     submit() {
       this.dialog = false;
-      console.log("登録");
-      console.log(this.register);
       this.$axios.post("/api/calendar", this.register).then((res) => {
-        console.log("res", res.data);
         this.$store.dispatch("calendar/calendar");
         this.$store.commit("changeAlert", {
           type: "success",
@@ -290,7 +286,6 @@ export default {
       });
     },
     eventDelete() {
-      console.log(this.showCoordinate.id);
       this.$axios
         .delete("/api/calendar", {
           params: {
@@ -298,7 +293,6 @@ export default {
           },
         })
         .then((res) => {
-          console.log("delete", res.data);
           this.$store.dispatch("calendar/calendar");
           this.$store.commit("changeAlert", {
             type: "success",

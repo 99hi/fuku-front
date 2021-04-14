@@ -81,6 +81,11 @@ export default {
 </script>
 
 <style scoped>
+.weather-box {
+  margin: 0 auto;
+  max-width: 960px;
+}
+
 .icon {
   filter: drop-shadow(4px 4px 4px #aaaaaa);
 }

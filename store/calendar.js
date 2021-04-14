@@ -16,7 +16,6 @@ export const mutations = {
 
 export const actions = {
   async calendar({ commit }) {
-    console.log("calender実行")
     let data = await this.$axios.get('/api/calendar').then((res) => { return res.data })
     commit('events', data)
   }
